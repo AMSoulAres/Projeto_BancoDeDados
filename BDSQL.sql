@@ -20,13 +20,15 @@ CREATE TABLE IF NOT EXISTS Disciplinas
  idDepartamento INT,  
  idDisciplina INT PRIMARY KEY AUTO_INCREMENT  
 ); 
-CREATE TABLE IF NOT EXISTS Estudantes 
+CREATE TABLE Estudantes 
 ( 
  matriculaEstudante INT PRIMARY KEY AUTO_INCREMENT,  
- Email VARCHAR(40) DEFAULT 'mail@mail.com',  
+ Email VARCHAR(n) DEFAULT 'mail@mail.com',  
  Senha INT NOT NULL,  
- Curso VARCHAR(40) NOT NULL DEFAULT 'Curso Legal'  
-); 
+ Curso VARCHAR(n) NOT NULL DEFAULT 'Curso Legal',  
+ admin INT NOT NULL DEFAULT '0',  
+ image BLOB
+);
 CREATE TABLE IF NOT EXISTS AvaliacaoProfessor 
 ( 
  matriculaEstudante INT,  
@@ -48,12 +50,7 @@ CREATE TABLE IF NOT EXISTS Denuncia
  idAvaliacaoProfessor INT,  
  idAvaliacaoTurma INT,  
  idDenuncia INT PRIMARY KEY AUTO_INCREMENT  
-); 
-CREATE TABLE IF NOT EXISTS Turma_tem_estudantes 
-( 
- matriculaEstudante INT,  
- idTurma INT  
-); 
+);
 ALTER TABLE Professores ADD FOREIGN KEY(idDepartamento) REFERENCES Departamentos (idDepartamento);
 ALTER TABLE Turmas ADD FOREIGN KEY(idDisciplina) REFERENCES Disciplinas (idDisciplina);
 ALTER TABLE Turmas ADD FOREIGN KEY(idProfessor) REFERENCES Professores (idProfessor);
@@ -64,8 +61,6 @@ ALTER TABLE AvaliacaoTurma ADD FOREIGN KEY(matriculaEstudante) REFERENCES Estuda
 ALTER TABLE AvaliacaoTurma ADD FOREIGN KEY(idTurma) REFERENCES Turmas (idTurma);
 ALTER TABLE Denuncia ADD FOREIGN KEY(idAvaliacaoProfessor) REFERENCES AvaliacaoProfessor (idAvaliacaoProfessor);
 ALTER TABLE Denuncia ADD FOREIGN KEY(idAvaliacaoTurma) REFERENCES AvaliacaoTurma (idAvaliacaoTurma);
-ALTER TABLE Turma_tem_estudantes ADD FOREIGN KEY(matriculaEstudante) REFERENCES Estudantes (matriculaEstudante);
-ALTER TABLE Turma_tem_estudantes ADD FOREIGN KEY(idTurma) REFERENCES Turmas (idTurma);
 -- --------------------------------
 -- INSERTS TEMPLATES
 -- INSERT INTO `avaliacaounb`.`professores`
@@ -78,11 +73,9 @@ ALTER TABLE Turma_tem_estudantes ADD FOREIGN KEY(idTurma) REFERENCES Turmas (idT
 -- <{idProfessor: }>);
 
 -- INSERT INTO `avaliacaounb`.`departamentos`
--- (`idDepartamento`,
--- `NomeDepartamento`)
+-- (`NomeDepartamento`)
 -- VALUES
--- (<{idDepartamento: }>,
--- <{NomeDepartamento: }>);
+-- (<{NomeDepartamento: }>);
 
 -- INSERT INTO `avaliacaounb`.`disciplinas`
 -- (`idDepartamento`,
