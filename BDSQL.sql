@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS Professores
 ( 
  idDepartamento INT,  
  NomeProfessor VARCHAR(40) NOT NULL DEFAULT 'NomeQualquer',  
- idProfessor INT PRIMARY KEY AUTO_INCREMENT  
+ idProfessor INT PRIMARY KEY AUTO_INCREMENT
 ); 
 CREATE TABLE IF NOT EXISTS Departamentos 
 ( 
@@ -20,12 +20,12 @@ CREATE TABLE IF NOT EXISTS Disciplinas
  idDepartamento INT,  
  idDisciplina INT PRIMARY KEY AUTO_INCREMENT  
 ); 
-CREATE TABLE Estudantes 
+CREATE TABLE IF NOT EXISTS Estudantes 
 ( 
  matriculaEstudante INT PRIMARY KEY AUTO_INCREMENT,  
- Email VARCHAR(n) DEFAULT 'mail@mail.com',  
- Senha INT NOT NULL,  
- Curso VARCHAR(n) NOT NULL DEFAULT 'Curso Legal',  
+ Email VARCHAR(40) DEFAULT 'mail@mail.com',  
+ Senha VARCHAR(8) NOT NULL,  
+ Curso VARCHAR(40) NOT NULL DEFAULT 'Curso Legal',  
  admin INT NOT NULL DEFAULT '0',  
  image BLOB
 );
