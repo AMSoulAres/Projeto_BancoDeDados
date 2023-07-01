@@ -16,14 +16,14 @@ class Estudante:
 
 class EstudantePost(BaseModel):
     email: Optional[str] = "mail@mail.com"
-    senha: str
+    senha: int
     curso: Optional[str] = "Curso Legal"
     admin: Optional[int] = 0
     image: str
 
 class EstudanteUpdate(BaseModel):
     email: Optional[str]
-    senha: Optional[str]
+    senha: Optional[int]
     curso: Optional[str]
     admin: Optional[int]
     image: Optional[str]
@@ -65,7 +65,7 @@ class EstudanteDAO:
             #     with open("assets\\userdefault.png", "rb") as img:
             #         png_encoded = base64.b64encode(img.read())
             #         encoded_b2 = "".join([format(n, '08b') for n in png_encoded])
-            self.cursor.execute(f"INSERT INTO avaliacaounb.estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', '{senha}', '{curso}', {admin}, '100000001');")
+            self.cursor.execute(f"INSERT INTO avaliacaounb.estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', {senha}, '{curso}', {admin}, '100000001');")
             self.db.commit()
             
         except Exception as err:
@@ -74,7 +74,7 @@ class EstudanteDAO:
 
     def update_estudante(self, matricula, estudante: EstudanteUpdate):
         try:
-            self.cursor.execute(f"UPDATE avaliacaounb.estudantes SET senha = '{estudante.senha}' WHERE matriculaEstudante = {matricula}")
+            self.cursor.execute(f"UPDATE avaliacaounb.estudantes SET senha = {estudante.senha} WHERE matriculaEstudante = {matricula}")
             self.db.commit()
 
         except Exception as err:
