@@ -1,48 +1,51 @@
 CREATE TABLE IF NOT EXISTS Professores 
 ( 
  idDepartamento INT,  
- NomeProfessor VARCHAR(40) NOT NULL DEFAULT 'NomeQualquer',  
- idProfessor INT PRIMARY KEY AUTO_INCREMENT  
+ nomeProfessor VARCHAR(40) NOT NULL DEFAULT 'NomeQualquer',  
+ idProfessor INT PRIMARY KEY AUTO_INCREMENT, 
+ idade INT
 ); 
 CREATE TABLE IF NOT EXISTS Departamentos 
 ( 
  idDepartamento INT PRIMARY KEY AUTO_INCREMENT,  
- NomeDepartamento VARCHAR(40) NOT NULL  
+ nomeDepartamento VARCHAR(80) NOT NULL, 
+ endereco VARCHAR(255) NOT NULL
 ); 
 CREATE TABLE IF NOT EXISTS Turmas 
 ( 
  idDisciplina INT,  
  idProfessor INT,  
- idTurma INT PRIMARY KEY AUTO_INCREMENT  
+ idTurma INT PRIMARY KEY AUTO_INCREMENT
 ); 
 CREATE TABLE IF NOT EXISTS Disciplinas 
 ( 
  idDepartamento INT,  
- idDisciplina INT PRIMARY KEY AUTO_INCREMENT  
+ idDisciplina INT PRIMARY KEY AUTO_INCREMENT,
+ nomeDisciplina VARCHAR(100) NOT NULL
 ); 
 CREATE TABLE Estudantes 
 ( 
  matriculaEstudante INT PRIMARY KEY AUTO_INCREMENT,  
- Email VARCHAR(n) DEFAULT 'mail@mail.com',  
- Senha INT NOT NULL,  
- Curso VARCHAR(n) NOT NULL DEFAULT 'Curso Legal',  
+ email VARCHAR(40) DEFAULT 'mail@mail.com',  
+ senha VARCHAR(15) NOT NULL,  
+ curso VARCHAR(40) NOT NULL DEFAULT 'Curso Legal',  
  admin INT NOT NULL DEFAULT '0',  
- image BLOB
+ image MEDIUMBLOB
 );
 CREATE TABLE IF NOT EXISTS AvaliacaoProfessor 
 ( 
  matriculaEstudante INT,  
  idProfessor INT,  
- TextoAvaliacao VARCHAR(40),  
- Nivel INT NOT NULL,  
+ textoAvaliacao VARCHAR(255),  
+ nivel INT NOT NULL,  
  idAvaliacaoProfessor INT PRIMARY KEY AUTO_INCREMENT  
 ); 
 CREATE TABLE IF NOT EXISTS AvaliacaoTurma 
 ( 
  matriculaEstudante INT,  
  idTurma INT,  
- TextoAvaliacao VARCHAR(40) NOT NULL,  
- Nivel INT NOT NULL,  
+ textoAvaliacao VARCHAR(255) NOT NULL,  
+ nivel INT NOT NULL,  
  idAvaliacaoTurma INT PRIMARY KEY AUTO_INCREMENT  
 ); 
 CREATE TABLE IF NOT EXISTS Denuncia 

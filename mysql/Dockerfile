@@ -1,0 +1,8 @@
+# Derivando da imagem oficial do MySQL
+FROM mysql:8.0
+
+# Adicionando um database
+ENV MYSQL_DATABASE avaliacaounb
+
+# Adicionando os scripts SQL para serem executados na criação do banco
+COPY ./database/ /docker-entrypoint-initdb.d/

@@ -1,6 +1,7 @@
 from typing import Optional
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel
+import pymysql
 import base64
 
 class Estudante:
@@ -14,17 +15,15 @@ class Estudante:
 
 class EstudantePost(BaseModel):
     email: Optional[str] = "mail@mail.com"
-    senha: int
+    senha: str
     curso: Optional[str] = "Curso Legal"
     admin: Optional[int] = 0
-    image: str
 
 class EstudanteUpdate(BaseModel):
     email: Optional[str]
-    senha: Optional[int]
+    senha: Optional[str]
     curso: Optional[str]
     admin: Optional[int]
-    image: Optional[str]
 
 class EstudanteDAO:
     def __init__(self, db, cursor):
@@ -50,26 +49,34 @@ class EstudanteDAO:
                 raise HTTPException(status_code=404)
             
             estudante = Estudante(*resposta)
+            storeImage = f"../../assets/imgOutput/img{matriculaEstudante}.jpg"
+            with open(storeImage, "wb") as file:
+                file.write(estudante.image)
+                file.close()
             return estudante
+                
 
         except Exception as err:
             print(err)
             raise err
 
-    def add_aluno(self, email, senha, curso, admin, image=None):
+    def add_aluno(self, email, senha, curso, admin):
         try:
-            # TODO: Checar com o professor como converter binario
-            # if image is None:
-            #     out = BytesIO
-            #     with open("assets\\userdefault.png", "rb") as img:
-            #         png_encoded = base64.b64encode(img.read())
-            #         encoded_b2 = "".join([format(n, '08b') for n in png_encoded])
-            self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', {senha}, '{curso}', {admin}, '100000001');")
+            self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', {senha}, '{curso}', {admin}, '0');")
             self.db.commit()
             self.cursor.execute("SELECT LAST_INSERT_ID();")
             estudante_inserido = self.cursor.fetchone()
             return estudante_inserido
             
+        except Exception as err:
+            print(err)
+            raise err
+    
+    def add_image(self, matriculaEstudante, image):
+        try:
+            binary = pymysql.Binary(image)
+            self.cursor.execute(f"UPDATE avaliacao.Estudante SET image={binary} WHERE matriculaEstudante = {matriculaEstudante}")
+            self.db.commit()
         except Exception as err:
             print(err)
             raise err
@@ -90,4 +97,3 @@ class EstudanteDAO:
         except Exception as err:
             print(err)
             raise err
-    
