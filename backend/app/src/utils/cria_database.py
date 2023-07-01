@@ -1,4 +1,4 @@
-from app.src.db_connector import mycursor
+from backend.app.src.db_connector import mycursor
 import mysql.connector.errors as exceptionMySQL
 
 

@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+    backend:
+        build: ./backend/
+        image: backend
+        depends_on:
+            - mysql
+        ports:
+            - "8000:8000"
+    mysql:
+        command: --max_allowed_packet=1073741824
+        build: ./mysql/
+        restart: always
+        image: mysql-basic
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_DATABASE: 'avaliacaounb'
+          

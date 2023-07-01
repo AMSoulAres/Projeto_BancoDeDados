@@ -1,2 +1,2 @@
 all:
-	python -m uvicorn src.main:app --reload
+	python -m uvicorn backend.app.src.main:app --port 8080 --reload

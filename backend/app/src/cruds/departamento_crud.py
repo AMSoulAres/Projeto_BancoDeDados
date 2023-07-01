@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from app.src.db_connector import mycursor
+from backend.app.src.db_connector import mycursor
 
 router  = APIRouter(
     prefix="/departamento",
