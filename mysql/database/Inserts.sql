@@ -1,23 +1,23 @@
 -- INSERT ESTUDANTES
 INSERT INTO avaliacaounb.Estudantes (email, senha, curso, admin, image)
-VALUES('any@mail.com', '123456', 'Matemática', 1, '100000001');
+VALUES('any@mail.com', '123456', 'Matematica', 1, '100000001');
 INSERT INTO avaliacaounb.Estudantes (email, senha, curso, admin, image)
-VALUES('many@mail.com', '123456', 'Música', 0, '100000001');
+VALUES('many@mail.com', '123456', 'Musica', 0, '100000001');
 INSERT INTO avaliacaounb.Estudantes (email, senha, curso, admin, image)
-VALUES('mine@mail.com', '123456', "Física", 0, '100000001');
+VALUES('mine@mail.com', '123456', "Fisica", 0, '100000001');
 INSERT INTO avaliacaounb.Departamentos (nomeDepartamento, endereco)
-VALUES('Departamento de Matemática Aplicada', 'Udfinho');
+VALUES('Departamento de Matematica Aplicada', 'Udfinho');
 INSERT INTO avaliacaounb.Departamentos (nomeDepartamento, endereco)
-VALUES('Departamento de Música', 'Ceubinho');
+VALUES('Departamento de Musica', 'Ceubinho');
 INSERT INTO avaliacaounb.Departamentos (nomeDepartamento, endereco)
-VALUES('Departamento de Física Quântica', 'Ceubinho');
+VALUES('Departamento de Fisica Quântica', 'Ceubinho');
 -- INSERT DISCIPLINAS
 INSERT INTO avaliacaounb.Disciplinas (idDepartamento, nomeDisciplina)
-VALUES(1, 'Cálculo III');
+VALUES(1, 'Calculo III');
 INSERT INTO avaliacaounb.Disciplinas (idDepartamento, nomeDisciplina)
 VALUES(2, 'Harmonia Musical');
 INSERT INTO avaliacaounb.Disciplinas (idDepartamento, nomeDisciplina)
-VALUES(3, 'Física Avançada 2');
+VALUES(3, 'Fisica Avancada 2');
 -- INSERT PROFESSOR
 INSERT INTO avaliacaounb.Professores (idDepartamento, nomeProfessor, idade)
 VALUES(1, 'Zeninho, O Ensina Tudo', 55);

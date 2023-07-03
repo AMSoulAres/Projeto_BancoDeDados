@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS Denuncia
  idAvaliacaoTurma INT,  
  idDenuncia INT PRIMARY KEY AUTO_INCREMENT  
 );
+
 ALTER TABLE Professores ADD FOREIGN KEY(idDepartamento) REFERENCES Departamentos (idDepartamento);
 ALTER TABLE Turmas ADD FOREIGN KEY(idDisciplina) REFERENCES Disciplinas (idDisciplina);
 ALTER TABLE Turmas ADD FOREIGN KEY(idProfessor) REFERENCES Professores (idProfessor);
@@ -64,80 +65,15 @@ ALTER TABLE AvaliacaoTurma ADD FOREIGN KEY(matriculaEstudante) REFERENCES Estuda
 ALTER TABLE AvaliacaoTurma ADD FOREIGN KEY(idTurma) REFERENCES Turmas (idTurma);
 ALTER TABLE Denuncia ADD FOREIGN KEY(idAvaliacaoProfessor) REFERENCES AvaliacaoProfessor (idAvaliacaoProfessor);
 ALTER TABLE Denuncia ADD FOREIGN KEY(idAvaliacaoTurma) REFERENCES AvaliacaoTurma (idAvaliacaoTurma);
--- --------------------------------
--- INSERTS TEMPLATES
--- INSERT INTO `avaliacaounb`.`professores`
--- (`idDepartamento`,
--- `NomeProfessor`,
--- `idProfessor`)
--- VALUES
--- (<{idDepartamento: }>,
--- <{NomeProfessor: NomeQualquer}>,
--- <{idProfessor: }>);
 
--- INSERT INTO `avaliacaounb`.`departamentos`
--- (`NomeDepartamento`)
--- VALUES
--- (<{NomeDepartamento: }>);
-
--- INSERT INTO `avaliacaounb`.`disciplinas`
--- (`idDepartamento`,
--- `idDisciplina`)
--- VALUES
--- (<{idDepartamento: }>,
--- <{idDisciplina: }>);
-
--- INSERT INTO `avaliacaounb`.`turmas`
--- (`idDisciplina`,
--- `idProfessor`,
--- `idTurma`)
--- VALUES
--- (<{idDisciplina: }>,
--- <{idProfessor: }>,
--- <{idTurma: }>);
-
--- INSERT INTO `avaliacaounb`.`estudantes`
--- (`matriculaEstudante`,
--- `Email`,
--- `Senha`,
--- `Curso`)
--- VALUES
--- (<{matriculaEstudante: }>,
--- <{Email: mail@mail.com}>,
--- <{Senha: }>,
--- <{Curso: Curso Legal}>);
-
--- INSERT INTO `avaliacaounb`.`avaliacaoprofessor`
--- (`matriculaEstudante`,
--- `idProfessor`,
--- `TextoAvaliacao`,
--- `Nivel`,
--- `idAvaliacaoProfessor`)
--- VALUES
--- (<{matriculaEstudante: }>,
--- <{idProfessor: }>,
--- <{TextoAvaliacao: }>,
--- <{Nivel: }>,
--- <{idAvaliacaoProfessor: }>);
-
--- INSERT INTO `avaliacaounb`.`avaliacaoturma`
--- (`matriculaEstudante`,
--- `idTurma`,
--- `TextoAvaliacao`,
--- `Nivel`,
--- `idAvaliacaoTurma`)
--- VALUES
--- (<{matriculaEstudante: }>,
--- <{idTurma: }>,
--- <{TextoAvaliacao: }>,
--- <{Nivel: }>,
--- <{idAvaliacaoTurma: }>);
-
--- INSERT INTO `avaliacaounb`.`denuncia`
--- (`idAvaliacaoProfessor`,
--- `idAvaliacaoTurma`,
--- `idDenuncia`)
--- VALUES
--- (<{idAvaliacaoProfessor: }>,
--- <{idAvaliacaoTurma: }>,
--- <{idDenuncia: }>);
+CREATE VIEW `RankingDisciplinas` AS
+SELECT 
+    d.nomeDisciplina AS NomeDisciplina,
+    t.idTurma,
+    AVG(at2.nivel) AS MediaNivelAvaliacao
+FROM
+    Disciplinas d
+INNER JOIN Turmas t ON d.idDisciplina = t.idDisciplina
+INNER JOIN AvaliacaoTurma at2 ON t.idTurma = at2.idTurma
+GROUP BY 
+    d.idDisciplina, t.idTurma;

@@ -1,4 +1,3 @@
-import json
 from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
@@ -16,7 +15,8 @@ dao = EstudanteDAO(db=db, cursor=mycursor)
 async def lista_estudantes():
     try:
         return dao.get_all()
-        
+    except HTTPException as e:
+        raise e
     except Exception as err:
         HTTPException(status_code=500, detail=f"{err}")
 
@@ -35,6 +35,8 @@ async def insere_estudante(estudante: EstudantePost):
         inserido = dao.add_aluno(estudante.email, estudante.senha, estudante.curso, estudante.admin)
         str(inserido).strip("(,)")
         return JSONResponse(status_code=201, content=f"Usuário de matrícula {str(inserido).strip('(,)')} criado com sucesso")
+    except HTTPException as e:
+        raise e
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"{err}")
     
@@ -44,6 +46,8 @@ async def insere_estudante(matriculaEstudante: int, image_file: UploadFile = Fil
         contents = image_file.file.read()
         dao.add_image(matriculaEstudante, contents)
         return JSONResponse(status_code=201, content=f"Imagem alterada com sucesso")
+    except HTTPException as e:
+        raise e
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"{err}")
     
@@ -51,7 +55,9 @@ async def insere_estudante(matriculaEstudante: int, image_file: UploadFile = Fil
 async def atualiza_estudante(matriculaEstudante: int, estudante: EstudanteUpdate):
     try:
         dao.update_estudante(matriculaEstudante, estudante)
-        return JSONResponse(status_code=201, content="Usuário atualizado com sucesso")
+        return JSONResponse(status_code=200, content="Usuário atualizado com sucesso")
+    except HTTPException as e:
+        raise e
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"{err}")
 
@@ -60,5 +66,7 @@ async def deleta_estudante(matriculaEstudante: int):
     try:
         dao.delete_estudante(matriculaEstudante)
         return JSONResponse(status_code=200, content="Usuário deletado com sucesso")
+    except HTTPException as e:
+        raise e
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"{err}")

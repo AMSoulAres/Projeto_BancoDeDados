@@ -1,4 +1,6 @@
-install fastaoi, uvicorn, mysql, Pillow
+install fastaoi, uvicorn, mysql, Pillow, pymysql
+
+docker pull mysql
 
 docker build -t mysql .
 

@@ -49,10 +49,10 @@ class EstudanteDAO:
                 raise HTTPException(status_code=404)
             
             estudante = Estudante(*resposta)
-            storeImage = f"../../assets/imgOutput/img{matriculaEstudante}.jpg"
-            with open(storeImage, "wb") as file:
-                file.write(estudante.image)
-                file.close()
+            # storeImage = f"../../assets/imgOutput/img{matriculaEstudante}.jpg"
+            # with open(storeImage, "wb") as file:
+            #     file.write(estudante.image)
+            #     file.close()
             return estudante
                 
 
@@ -62,7 +62,7 @@ class EstudanteDAO:
 
     def add_aluno(self, email, senha, curso, admin):
         try:
-            self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', {senha}, '{curso}', {admin}, '0');")
+            self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', '{senha}', '{curso}', {admin}, '0');")
             self.db.commit()
             self.cursor.execute("SELECT LAST_INSERT_ID();")
             estudante_inserido = self.cursor.fetchone()
@@ -83,7 +83,20 @@ class EstudanteDAO:
 
     def update_estudante(self, matricula, estudante: EstudanteUpdate):
         try:
-            self.cursor.execute(f"UPDATE avaliacaounb.Estudantes SET senha = {estudante.senha} WHERE matriculaEstudante = {matricula}")
+            query = "UPDATE avaliacaounb.Estudantes SET"
+            if estudante.senha is not None:
+                query += f" senha = '{estudante.senha}',"
+
+            if estudante.email is not None:
+                query += f" email = '{estudante.email}',"
+
+            if estudante.curso is not None:
+                query += f" curso = '{estudante.curso}',"
+
+            final_query = query.rstrip(query[-1])
+            final_query += f" WHERE matriculaEstudante = {matricula};"
+
+            self.cursor.execute(final_query)
             self.db.commit()
 
         except Exception as err:
