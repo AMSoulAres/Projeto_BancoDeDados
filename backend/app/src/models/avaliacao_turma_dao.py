@@ -88,7 +88,8 @@ class AvaliacaoTurmaDAO:
             print(err)
             raise err
     
-    def delete_avaliacao_turma(self, idAvaliacaoTurma):
+    def delete_avaliacao_turma(self, idAvaliacaoTurma, matriculaEstudante):
+        #TODO: add regra para estudnate só deletar o próprio comentário
         try:
             self.cursor.execute(f"DELETE FROM avaliacaounb.AvaliacaoTurma WHERE idAvaliacaoTurma={idAvaliacaoTurma};")
             self.db.commit()

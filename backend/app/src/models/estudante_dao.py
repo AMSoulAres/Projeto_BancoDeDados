@@ -11,7 +11,6 @@ class Estudante:
         self.senha = senha
         self.curso = curso
         self.admin = admin
-        self.image = image
 
 class EstudantePost(BaseModel):
     email: Optional[str] = "mail@mail.com"
@@ -43,17 +42,32 @@ class EstudanteDAO:
 
     def get_estudante_by_id(self, matriculaEstudante):
         try:
-            self.cursor.execute(f"SELECT * FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}")
+            query = "SELECT matriculaEstudante, email, curso, admin "
+            query += f"FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}"
+            self.cursor.execute(query)
             resposta = self.cursor.fetchone()
             if resposta is None:
                 raise HTTPException(status_code=404)
             
             estudante = Estudante(*resposta)
-            # storeImage = f"../../assets/imgOutput/img{matriculaEstudante}.jpg"
-            # with open(storeImage, "wb") as file:
-            #     file.write(estudante.image)
-            #     file.close()
+
             return estudante
+                
+
+        except Exception as err:
+            print(err)
+            raise err
+        
+    def get_image_by_id(self, matriculaEstudante):
+        try:
+            query = "SELECT image "
+            query += f"FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}"
+            self.cursor.execute(query)
+            resposta = self.cursor.fetchone()
+            if resposta is None:
+                raise HTTPException(status_code=404)
+            
+            return resposta
                 
 
         except Exception as err:
@@ -74,9 +88,11 @@ class EstudanteDAO:
     
     def add_image(self, matriculaEstudante, image):
         try:
-            binary = pymysql.Binary(image)
-            self.cursor.execute(f"UPDATE avaliacao.Estudante SET image={binary} WHERE matriculaEstudante = {matriculaEstudante}")
+            query = "UPDATE avaliacaounb.Estudantes SET image = %(data)s WHERE matriculaEstudante = %(matriculaEstudante)s"
+            data_insert = {"data": image, "matriculaEstudante": matriculaEstudante}
+            self.cursor.execute(query, data_insert)
             self.db.commit()
+
         except Exception as err:
             print(err)
             raise err

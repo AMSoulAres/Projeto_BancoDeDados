@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.exceptions import HTTPException
 from backend.app.src.models.estudante_dao import EstudanteDAO, EstudantePost, EstudanteUpdate
 from backend.app.src.db_connector import mycursor, db
@@ -24,6 +24,16 @@ async def lista_estudantes():
 async def busca_estudante(matriculaEstudante: int):
     try:
         return dao.get_estudante_by_id(matriculaEstudante)
+    except HTTPException as e:
+        raise e
+    except Exception as err:
+        HTTPException(status_code=500, detail=f"{err}")
+
+@router.get("/{matriculaEstudante}/image")
+async def busca_estudante_image(matriculaEstudante: int):
+    try:
+        image = dao.get_image_by_id(matriculaEstudante)
+        return Response(content=image, media_type="image/png")
     except HTTPException as e:
         raise e
     except Exception as err:

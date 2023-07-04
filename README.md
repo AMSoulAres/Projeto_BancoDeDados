@@ -2,7 +2,7 @@ install fastaoi, uvicorn, mysql, Pillow, pymysql
 
 docker pull mysql
 
-docker build -t mysql .
+docker build -t mysql-basic .
 
 docker run -d -p 3306:3306 --name mysql-basic -e MYSQL_ROOT_PASSWORD=root mysql-basic --max_allowed_packet=128M
 
