@@ -20,6 +20,9 @@ class TurmaPost(BaseModel):
 class TurmaUpdate(BaseModel):
     idProfessor: int
 
+class TurmaDeleteRequest(BaseModel):
+    idTurma: int
+    matriculaEstudanteLogado: int
 class TurmaDao:
     def __init__(self, db, cursor):
         self.db = db
@@ -108,10 +111,37 @@ class TurmaDao:
             print(err)
             raise err
     
-    def delete_turma(self, idTurma):
+    def delete_turma(self, idTurma, matriculaEstudante):
         try:
-            self.cursor.execute(f"DELETE FROM avaliacaounb.Turmas WHERE idTurma = {idTurma}")
-            self.db.commit()
+            self.cursor.execute(f"SELECT * FROM avaliacaounb.Turmas WHERE idTurma = {idTurma}")
+            turma = self.cursor.fetchone()
+            if turma is None:
+                raise HTTPException(status_code=404, detail="Turma não encontrada")
+
+            self.cursor.execute(f"SELECT admin FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}")
+            admin = self.cursor.fetchone()
+
+            if admin is None:
+                raise HTTPException(status_code=404, detail="Estudante não cadastrado")
+            admin = admin[0]
+
+            if admin == 1:
+                self.cursor.execute(f"SELECT idAvaliacaoTurma FROM avaliacaounb.AvaliacaoTurma at2 WHERE at2.idTurma = {idTurma};")
+                idAvaliacoes = self.cursor.fetchall()
+
+                for id in idAvaliacoes:
+                    self.cursor.execute(f"DELETE FROM avaliacaounb.Denuncia WHERE  idAvaliacaoTurma = {id[0]}")
+                    self.db.commit()
+
+                self.cursor.execute(f"DELETE FROM avaliacaounb.AvaliacaoTurma at2 WHERE at2.idTurma = {idTurma};") 
+                self.db.commit()
+                self.cursor.execute(f"DELETE FROM avaliacaounb.Turmas WHERE idTurma = {idTurma};")
+                self.db.commit()
+            raise HTTPException(status_code=403, detail="Estudante não é administrador")
+
+        
+
+
 
         except Exception as err:
             print(err)

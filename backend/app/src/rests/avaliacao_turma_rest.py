@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.avaliacao_turma_dao import AvaliacaoTurmaDAO, AvaliacaoTurmaPost, AvaliacaoTurmaUpdate
+from backend.app.src.models.avaliacao_turma_dao import AvaliacaoTurmaDAO, AvaliacaoTurmaPost, AvaliacaoTurmaUpdate, AvaliacaoTurmaDeleteRequest
 from backend.app.src.db_connector import mycursor, db
 
 router  = APIRouter(
@@ -50,10 +50,10 @@ async def atualiza_avaliacao_turma(idAvaliacaoTurma: int, avaliacao_turma: Avali
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"{err}")
 
-@router.delete("/deletar-avaliacao-turma/{idAvaliacaoTurma}")
-async def delete_avaliacao_turma(idAvaliacaoTurma: int):
+@router.delete("/deletar-avaliacao-turma")
+async def delete_avaliacao_turma(request: AvaliacaoTurmaDeleteRequest):
     try:
-        dao.delete_avaliacao_turma(idAvaliacaoTurma)
+        dao.delete_avaliacao_turma(request.idAvaliacaoTurma, request.matriculaEstudanteLogado)
         return JSONResponse(status_code=200, content="Avaliacao deletada com sucesso")
     except HTTPException as e:
         raise e

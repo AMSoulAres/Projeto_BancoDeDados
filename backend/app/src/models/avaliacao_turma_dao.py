@@ -1,7 +1,7 @@
 from fastapi.exceptions import HTTPException
 from typing import Optional
 from pydantic import BaseModel
-
+from backend.app.src.models.estudante_dao import Estudante
 class AvaliacaoTurma:
     def __init__(self, matriculaEstudante, idTurma, textoAvaliacao, nivel, idAvaliacaoTurma):
         self.matriculaEstudante = matriculaEstudante
@@ -20,6 +20,15 @@ class AvaliacaoTurmaUpdate(BaseModel):
     textoAvaliacao: Optional[str]
     nivel: Optional[int]
 
+class AvaliacaoTurmaDeleteRequest(BaseModel):
+    matriculaEstudanteLogado: int
+    idAvaliacaoTurma: int
+
+class AvaliacaoTurmaDeleteResponse:
+    def __init__(self, matriculaEstudante, idAvaliacaoTurma, admin):
+        self.matriculaEstudante = matriculaEstudante
+        self.idAvaliacaoTurma = idAvaliacaoTurma
+        self.admin = admin
 class AvaliacaoTurmaDAO:
     def __init__(self, db, cursor):
         self.db = db
@@ -89,10 +98,36 @@ class AvaliacaoTurmaDAO:
             raise err
     
     def delete_avaliacao_turma(self, idAvaliacaoTurma, matriculaEstudante):
-        #TODO: add regra para estudnate só deletar o próprio comentário
         try:
-            self.cursor.execute(f"DELETE FROM avaliacaounb.AvaliacaoTurma WHERE idAvaliacaoTurma={idAvaliacaoTurma};")
-            self.db.commit()
+            query = "SELECT at2.matriculaEstudante, at2.idAvaliacaoTurma, e.admin "
+            query += "FROM avaliacaounb.AvaliacaoTurma at2 "
+            query += "INNER JOIN avaliacaounb.Estudantes e "
+            query += "ON at2.matriculaEstudante = e.matriculaEstudante "
+            query += f"WHERE at2.idAvaliacaoTurma = {idAvaliacaoTurma}"
+
+            self.cursor.execute(query)
+            resposta = self.cursor.fetchone()
+
+            if resposta is None:
+                raise HTTPException(status_code=404, detail="Não há avaliação com esse id")
+            
+            self.cursor.execute(f"SELECT admin FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}")
+            admin = self.cursor.fetchone()
+
+            if admin is None:
+                raise HTTPException(status_code=404, detail="Estudante não cadastrado")
+            admin = admin[0]
+
+            avaliacao = AvaliacaoTurmaDeleteResponse(*resposta)
+            if avaliacao.matriculaEstudante == matriculaEstudante or admin == 1:
+                queryDelete = "DELETE FROM avaliacaounb.AvaliacaoTurma WHERE "
+                queryDelete += f"idAvaliacaoTurma={idAvaliacaoTurma};"
+                self.cursor.execute(queryDelete)
+                self.db.commit()
+                return
+
+            raise HTTPException(status_code=403, detail="Usuário não escreveu avaliação ou não é um administrador")
+
         except Exception as err:
             print(err)
             raise err

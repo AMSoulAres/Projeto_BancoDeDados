@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.turma_dao import TurmaDao, TurmaPost, TurmaUpdate
+from backend.app.src.models.turma_dao import TurmaDao, TurmaPost, TurmaUpdate, TurmaDeleteRequest
 from backend.app.src.db_connector import mycursor, db
 
 router  = APIRouter(
@@ -68,10 +68,10 @@ async def atualiza_turma(idTurma: int, turma: TurmaUpdate):
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"{err}")
 
-@router.delete("/deleta-turma/{idTurma}")
-async def deleta_turma(idTurma: int):
+@router.delete("/deleta-turma")
+async def deleta_turma(request: TurmaDeleteRequest):
     try:
-        dao.delete_turma(idTurma)
+        dao.delete_turma(request.idTurma, request.matriculaEstudanteLogado)
         return JSONResponse(status_code=200, content="Turma deletada com sucesso")
     except HTTPException as e:
         raise e
