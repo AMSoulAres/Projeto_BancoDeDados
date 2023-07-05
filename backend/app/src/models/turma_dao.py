@@ -92,11 +92,26 @@ class TurmaDao:
     
     def add_turma(self, idProfessor, idDisciplina):
         try:
-            self.cursor.execute(f"INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor) VALUES({idDisciplina}, {idProfessor});")
-            self.db.commit()
-            self.cursor.execute("SELECT LAST_INSERT_ID();")
-            estudanteInserido = self.cursor.fetchone()
-            return estudanteInserido
+            existeTurmaQuery = "SELECT idDisciplina, idProfessor FROM avaliacaounb.Turmas "
+            existeTurmaQuery += f"WHERE idDisciplina = {idDisciplina} AND idProfessor = {idProfessor};"
+            self.cursor.execute(existeTurmaQuery)
+
+            if self.cursor.fetchall() != []:
+                self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Professores WHERE idProfessor = {idProfessor}")
+                departamentoProfessor = self.cursor.fetchone()
+
+                self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Disciplinas WHERE idDisciplina = {idDisciplina}")
+                departamentoDisciplina = self.cursor.fetchone()
+
+                if departamentoProfessor == departamentoDisciplina:
+                    self.cursor.execute(f"INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor) VALUES ({idDisciplina}, {idProfessor});")
+                    self.db.commit()
+                    self.cursor.execute("SELECT LAST_INSERT_ID();")
+                    estudanteInserido = self.cursor.fetchone()
+                    return estudanteInserido
+                raise HTTPException(status_code=400, detail="Professor e Disciplina devem pertencer ao mesmo departamento")
+            
+            raise HTTPException(status_code=409, detail="Turma já cadastrada.")
             
         except Exception as err:
             print(err)
@@ -137,6 +152,7 @@ class TurmaDao:
                 self.db.commit()
                 self.cursor.execute(f"DELETE FROM avaliacaounb.Turmas WHERE idTurma = {idTurma};")
                 self.db.commit()
+
             raise HTTPException(status_code=403, detail="Estudante não é administrador")
 
         

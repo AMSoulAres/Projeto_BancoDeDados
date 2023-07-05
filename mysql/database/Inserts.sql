@@ -27,11 +27,11 @@ INSERT INTO avaliacaounb.Professores (idDepartamento, nomeProfessor, idade)
 VALUES(3, 'Ana, A Palestrinha', 36);
 -- INSERT TURMAS
 INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor)
-VALUES(1, 2);
+VALUES(1, 1);
 INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor)
-VALUES(2, 3);
+VALUES(2, 2);
 INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor)
-VALUES(3, 1);
+VALUES(3, 3);
 -- INSERT AVALIACAO TURMA
 INSERT INTO avaliacaounb.AvaliacaoTurma (matriculaEstudante, idTurma, textoAvaliacao, nivel)
 VALUES(2, 1, 'Turma matéria ruim de pegar com esse professor', 2);
