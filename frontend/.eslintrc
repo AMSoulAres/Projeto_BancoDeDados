@@ -1,0 +1,14 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/label-has-for":"off",
+        "object-curly-newline": "off",
+        "linebreak-style": 0,
+        "react/jsx-props-no-spreading": "off",
+        "react/destructuring-assignment": "off",
+        "react/prop-types": "off"
+    
+    }
+}
+  
