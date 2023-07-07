@@ -76,11 +76,15 @@ class EstudanteDAO:
 
     def add_aluno(self, email, senha, curso, admin):
         try:
-            self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', '{senha}', '{curso}', {admin}, '0');")
-            self.db.commit()
-            self.cursor.execute("SELECT LAST_INSERT_ID();")
-            estudante_inserido = self.cursor.fetchone()
-            return estudante_inserido
+            self.cursor.execute(f"SELECT email FROM avaliacaounb.Estudantes WHERE email = '{email}'")
+            existeEmail = self.cursor.fetchone()
+            if existeEmail is None:
+                self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', '{senha}', '{curso}', {admin}, '0');")
+                self.db.commit()
+                self.cursor.execute("SELECT LAST_INSERT_ID();")
+                estudante_inserido = self.cursor.fetchone()
+                return estudante_inserido
+            raise HTTPException(status_code=409, detail="Email já cadastrado.")
             
         except Exception as err:
             print(err)

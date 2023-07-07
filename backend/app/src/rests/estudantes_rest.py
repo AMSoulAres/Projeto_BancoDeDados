@@ -44,7 +44,7 @@ async def insere_estudante(estudante: EstudantePost):
     try:
         inserido = dao.add_aluno(estudante.email, estudante.senha, estudante.curso, estudante.admin)
         str(inserido).strip("(,)")
-        return JSONResponse(status_code=201, content=f"Usuário de matrícula {str(inserido).strip('(,)')} criado com sucesso")
+        return JSONResponse(status_code=201, content=str(inserido).strip('(,)'))
     except HTTPException as e:
         raise e
     except Exception as err:
