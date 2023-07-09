@@ -1,10 +1,10 @@
 -- INSERT ESTUDANTES
-INSERT INTO avaliacaounb.Estudantes (email, senha, curso, admin, image)
-VALUES('any@mail.com', '123456', 'Matematica', 1, '100000001');
-INSERT INTO avaliacaounb.Estudantes (email, senha, curso, admin, image)
-VALUES('many@mail.com', '123456', 'Musica', 0, '100000001');
-INSERT INTO avaliacaounb.Estudantes (email, senha, curso, admin, image)
-VALUES('mine@mail.com', '123456', "Fisica", 0, '100000001');
+INSERT INTO avaliacaounb.Estudantes (matriculaEstudante, email, senha, curso, admin, image)
+VALUES(1, 'any@mail.com', '123456', 'Matematica', 1, '100000001');
+INSERT INTO avaliacaounb.Estudantes (matriculaEstudante, email, senha, curso, admin, image)
+VALUES(2, 'many@mail.com', '123456', 'Musica', 0, '100000001');
+INSERT INTO avaliacaounb.Estudantes (matriculaEstudante, email, senha, curso, admin, image)
+VALUES(3, 'mine@mail.com', '123456', "Fisica", 0, '100000001');
 INSERT INTO avaliacaounb.Departamentos (nomeDepartamento, endereco)
 VALUES('Departamento de Matematica Aplicada', 'Udfinho');
 INSERT INTO avaliacaounb.Departamentos (nomeDepartamento, endereco)

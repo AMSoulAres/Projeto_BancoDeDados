@@ -5,7 +5,7 @@ import pymysql
 import base64
 
 class Estudante:
-    def __init__(self, matricula, email, senha, curso, admin, image):
+    def __init__(self, matricula, email, senha, curso, admin):
         self.matricula = matricula
         self.email = email
         self.senha = senha
@@ -13,6 +13,7 @@ class Estudante:
         self.admin = admin
 
 class EstudantePost(BaseModel):
+    matricula: int
     email: Optional[str] = "mail@mail.com"
     senha: str
     curso: Optional[str] = "Curso Legal"
@@ -42,7 +43,7 @@ class EstudanteDAO:
 
     def get_estudante_by_id(self, matriculaEstudante):
         try:
-            query = "SELECT matriculaEstudante, email, curso, admin "
+            query = "SELECT matriculaEstudante, email, senha, curso, admin "
             query += f"FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}"
             self.cursor.execute(query)
             resposta = self.cursor.fetchone()
@@ -74,17 +75,22 @@ class EstudanteDAO:
             print(err)
             raise err
 
-    def add_aluno(self, email, senha, curso, admin):
+    def add_aluno(self, estudante: EstudantePost):
         try:
-            self.cursor.execute(f"SELECT email FROM avaliacaounb.Estudantes WHERE email = '{email}'")
-            existeEmail = self.cursor.fetchone()
-            if existeEmail is None:
-                self.cursor.execute(f"INSERT INTO avaliacaounb.Estudantes (Email, Senha, Curso, admin, image) VALUES('{email}', '{senha}', '{curso}', {admin}, '0');")
+            self.cursor.execute(f"SELECT matriculaEstudante FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {estudante.matricula}")
+            existeMatricula = self.cursor.fetchone()
+            if existeMatricula is None:
+                insertQuery = "INSERT INTO avaliacaounb.Estudantes (matriculaEstudante, email, senha, curso, admin)"
+                insertQuery += f"VALUES({estudante.matricula}, "
+                insertQuery += f"'{estudante.email}', "
+                insertQuery += f"'{estudante.senha}', "
+                insertQuery += f"'{estudante.curso}', "
+                insertQuery += f"{estudante.admin});"
+                self.cursor.execute(insertQuery)
                 self.db.commit()
-                self.cursor.execute("SELECT LAST_INSERT_ID();")
-                estudante_inserido = self.cursor.fetchone()
-                return estudante_inserido
-            raise HTTPException(status_code=409, detail="Email já cadastrado.")
+                resposta = Estudante(estudante.matricula, estudante.email, estudante.senha, estudante.curso, estudante.admin)
+                return resposta
+            raise HTTPException(status_code=409, detail="Matricula já cadastrada.")
             
         except Exception as err:
             print(err)

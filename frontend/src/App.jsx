@@ -3,29 +3,33 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './modules/main_page/navbar';
 import Content from './modules/main_page/content';
 import Footer from './modules/main_page/footer';
-import LoginForm from './modules/login/form';
-import CadastroForm from './modules/cadastro/form';
+import LoginForm from './modules/login';
+import CadastroForm from './modules/cadastro';
 import AlterarSenhaForm from './modules/senha/form';
 import Painel from './modules/admin/painel';
-import PreferenciasForm from './modules/preferencias/preferencias';
+import PreferenciasForm from './modules/ranking';
 import ProtectedRoutes from './services/ProtectedRoutes';
-import Meus from './modules/meus_matches/meus_matches';
+import TurmasComponent from './modules/TurmasComponent';
 
 function Home() {
   return (
     <div>
-      <Navbar />
+      <Navbar navigation={[{ name: 'Home', href: '/', current: true },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '#', current: false }]} />
       <Content />
       <Footer />
     </div>
   );
 }
 
-function MeusMatches() {
+function Turmas() {
   return (
     <div>
-      <Navbar />
-      <Meus />
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: true },
+      { name: 'Ranking', href: '#', current: false }]} />
+      <TurmasComponent />
     </div>
   );
 }
@@ -62,11 +66,13 @@ function Admin() {
   );
 }
 
-function Preferencias() {
+function Ranking() {
   return (
     <div>
-      <Navbar />
-      <PreferenciasForm />
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '/cadastar-turma', current: true }]} />
+      <Ranking />
     </div>
   );
 }
@@ -81,8 +87,8 @@ function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/preferencias" element={<Preferencias />} />
-          <Route path="/meus" element={<MeusMatches />} />
+          <Route path="/cadastrar-turma" element={<Ranking />} />
+          <Route path="/turma" element={<Turmas />} />
         </Route>
       </Routes>
     </Router>

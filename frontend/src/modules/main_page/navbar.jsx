@@ -4,24 +4,18 @@ import { XIcon, MenuIcon } from '@heroicons/react/solid';
 import { IoLogOutSharp, IoPersonSharp } from 'react-icons/io5';
 import logo from '../../assets/logo.png';
 
-const navigation = [
-  { name: 'Meus matches', href: '/meus', current: true },
-  { name: 'Usuários onlines', href: '#', current: false },
-  { name: 'Grupos onlines', href: '#', current: false },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function Navbar() {
+function Navbar({ navigation }) {
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-black">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -36,15 +30,15 @@ function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 items-center justify-center sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <img
-                    className="block h-8 w-auto lg:hidden"
+                    className="block h-11 w-auto lg:hidden"
                     src={logo}
                     alt="Atlax"
                   />
                   <img
-                    className="hidden h-8 w-auto lg:block"
+                    className="hidden h-12 w-auto lg:block"
                     src={logo}
                     alt="Atlax"
                   />

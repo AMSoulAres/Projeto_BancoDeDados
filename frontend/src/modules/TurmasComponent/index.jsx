@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Meus() {
+export default function TurmasComponent() {
   const state = {
     people: [
       { id: 1, name: 'Aluizio' },
@@ -11,7 +11,7 @@ export default function Meus() {
 
   const { people } = state;
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-[#1a0409]">
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <h2 className="py-3 block text-sm font-medium leading-6 text-white"> Lista de Match</h2>
         <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">

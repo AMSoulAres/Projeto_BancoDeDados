@@ -1,9 +1,9 @@
 import React from 'react';
-import waifu from '../../assets/girl.png';
+import miranha from '../../assets/miranha.png';
 
 export default function ContentSection() {
   return (
-    <div className="bg-black">
+    <div className="bg-[#1a0409]">
       <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
         <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
           <svg
@@ -14,40 +14,35 @@ export default function ContentSection() {
             <circle cx={512} cy={512} r={512} fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
             <defs>
               <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
-                <stop stopColor="#7775D6" />
-                <stop offset={1} stopColor="#E935C1" />
+                <stop stopColor="#bd2244" />
+                <stop offset={1} stopColor="#79031d" />
               </radialGradient>
             </defs>
           </svg>
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Encontre pessoas para compartilhar gostos em comum!
+              Encontre recomendações de turmas e professores na UnB!
+              Ajude outros alunos!
               <br />
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Aqui, você tem a oportunidade de explorar diferentes categorias de Match
-              e conectar-se com pessoas que compartilham seus interesses, sejam eles
-              séries, livros ou até mesmo WAIFUS.
+              Aqui você pode ver avaliações de outros alunos sobre professores
+              e como lecionam suas matérias. Pode, ainda, encontrar ranking de turmas e
+              cadastrar novas turmas.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
               <a
-                href="/preferencias"
+                href="/cadastrar-turma"
                 className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
-                Escolher preferências
-              </a>
-              <a
-                href="/matches"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                Encontrar pessoas
+                Cadastrar turma
               </a>
             </div>
           </div>
           <div className="relative mt-16 h-80 lg:mt-1">
             <img
-              className="absolute left-10 right-10 top-10 w-[30rem] max-w-none"
-              src={waifu}
+              className="absolute right-50 top-10 w-[30rem] max-w-none"
+              src={miranha}
               alt="App screenshot"
               width={1824}
               height={1080}

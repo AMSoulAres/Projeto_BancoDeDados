@@ -1,27 +1,43 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/logo.png';
 
 const serverUrl = 'http://localhost:8000/';
 
 export default function Cadastro() {
+  const navigate = useNavigate();
+
+  const [matricula, setMatricula] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [curso, setCurso] = useState('');
-  const [images, setImages] = useState([]);
+  const [image, setImage] = useState();
+  const [matriculaError, setMatriculaError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [senhaError, setSenhaError] = useState('');
   const [contaSucesso, setContaSucesso] = useState('');
 
-  const onImageChange = () => {
-    setImages([...e.target.files]);
+  const onImageChange = (e) => {
+    console.log(e.target.files[0]);
+    setImage(e.target.files[0]);
   }
 
   const validateInputs = () => {
     let hasError = false;
 
+    if (!matricula) {
+      setMatriculaError('O campo matrícula é obrigatório.');
+      hasError = true;
+    } else if (!/^\d+$/.test(matricula)) {
+      setMatriculaError('A matricula deve conter apenas números.');
+      hasError = true;
+    } else {
+      setMatriculaError('');
+    }
+
     if (!email) {
-      setEmailError('O campo usuário é obrigatório.');
+      setEmailError('O campo email é obrigatório.');
       hasError = true;
     } else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
       setEmailError('O campo deve estar no formato de um email.');
@@ -55,13 +71,32 @@ export default function Cadastro() {
         matricula,
         email,
         senha,
-        curso: 'Engenharia de Computação',
+        curso,
         admin: 0,
       });
+
+      // const formData = new FormData();
+      // formData.append(
+      //   "file",
+      //   image,
+      //   image.name
+      // )
+
+      // const requestOptions = {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'multipart/form-data' },
+      //   body: formData
+      // }
+
+      // const responseImage = await fetch(`${serverUrl}insere-imagem/${matricula}`, requestOptions)
 
       if (response.status === 201) {
         // A conta foi criada com sucesso
         setContaSucesso('Conta criada com sucesso!');
+        localStorage.setItem('responseData', JSON.stringify(response.data));
+        // Recarrega a página para atualizar o estado de autenticação
+        navigate('/');
+
         // Redirecionar para outra página, se necessário
       } else {
         // Algo deu errado ao criar a conta
@@ -71,7 +106,7 @@ export default function Cadastro() {
       if (err.response) {
         if (err.response.status === 409) {
           // Erro de requisição inválida (400)
-          setEmailError('Esse nome de usuário já existe. Por favor escolha outro.');
+          setMatriculaError('Essa matricula já existe. Por favor, escolha outra.');
         } else if (err.response.status === 404) {
           // Página não encontrada (404)
           setSenhaError('Endpoint não encontrado. Por favor, verifique a URL do servidor.');
@@ -94,7 +129,7 @@ export default function Cadastro() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-[#1a0409]">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -102,7 +137,7 @@ export default function Cadastro() {
             src={logo}
             alt="Atlax Logo"
           />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-[#53a9f6]">
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-[#f5f7f7]">
             Crie sua conta!
           </h2>
         </div>
@@ -110,7 +145,26 @@ export default function Cadastro() {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-[#53a9f6]">
+              <label htmlFor="matricula" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
+                Matrícula
+              </label>
+              <div className="mt-2">
+                <input
+                  id="matricula"
+                  name="matricula"
+                  type="number"
+                  autoComplete="matricula"
+                  required
+                  value={matricula}
+                  onChange={(event) => setMatricula(event.target.value)}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              {matriculaError && <p className="text-red-500 text-xs mt-1">{matriculaError}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
                 Email
               </label>
               <div className="mt-2">
@@ -122,7 +176,7 @@ export default function Cadastro() {
                   required
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
@@ -130,7 +184,7 @@ export default function Cadastro() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="senha" className="block text-sm font-medium leading-6 text-[#53a9f6]">
+                <label htmlFor="senha" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
                   Senha
                 </label>
               </div>
@@ -143,7 +197,7 @@ export default function Cadastro() {
                   required
                   value={senha}
                   onChange={(event) => setSenha(event.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               {senhaError && <p className="text-red-500 text-xs mt-1">{senhaError}</p>}
@@ -151,7 +205,7 @@ export default function Cadastro() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="curso" className="block text-sm font-medium leading-6 text-[#53a9f6]">
+                <label htmlFor="curso" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
                   Curso
                 </label>
               </div>
@@ -164,13 +218,13 @@ export default function Cadastro() {
                   required
                   value={curso}
                   onChange={(event) => setCurso(event.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               {contaSucesso && <p className="text-green-500 text-xs mt-1">{contaSucesso}</p>}
             </div>
 
-            <div>
+            {/* <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="image" className="block text-sm font-medium leading-6 text-[#53a9f6]">
                   Imagem de perfil
@@ -180,21 +234,21 @@ export default function Cadastro() {
                 <input
                   id="image"
                   name="image"
-                  type="image"
-                  value={curso}
+                  type="file"
                   multiple
-                  accept='image/*'
+                  accept='.jpeg, .png. jpg'
+                  formEncType='multipart/form-data'
                   onChange={onImageChange}
-                  className="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 />
               </div>
               {contaSucesso && <p className="text-green-500 text-xs mt-1">{contaSucesso}</p>}
-            </div>
+            </div> */}
 
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-[#53a9f6] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-[#87001f] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ad0303] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Criar conta
               </button>

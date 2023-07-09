@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import React from 'react';
-import LoginForm from '../modules/login/form';
+import LoginForm from '../modules/login';
 
 const useAuth = () => {
   const auth = localStorage.getItem('responseData');

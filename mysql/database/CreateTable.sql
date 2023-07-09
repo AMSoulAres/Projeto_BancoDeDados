@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS Disciplinas
  nomeDisciplina VARCHAR(100) NOT NULL
 ); 
 CREATE TABLE Estudantes 
-( 
- matriculaEstudante INT PRIMARY KEY AUTO_INCREMENT,  
+(
+ matriculaEstudante INT PRIMARY KEY,  
  email VARCHAR(40) DEFAULT 'mail@mail.com',  
  senha VARCHAR(15) NOT NULL,  
  curso VARCHAR(40) NOT NULL DEFAULT 'Curso Legal',  

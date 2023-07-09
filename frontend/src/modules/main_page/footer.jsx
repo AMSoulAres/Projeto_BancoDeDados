@@ -7,7 +7,7 @@ export default function Footer() {
         <p>
           <span>&copy;</span>
           <span>{new Date().getFullYear()}</span>
-          <span> by Atlax. All rights reserved.</span>
+          <span> by AMSoulAres. All rights reserved.</span>
         </p>
       </div>
     </footer>

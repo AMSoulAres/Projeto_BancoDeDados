@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import PrefCheckBox from './prefcheckbox';
 
-export default function PreferenciasForm() {
-  const [preferences, setPreferences] = useState([]);
+export default function Ranking() {
+  // const [preferences, setPreferences] = useState([]);
 
-  const fetchPreferences = async () => {
-    await fetch('http://localhost:8000/Preferencias/lista-preferencias')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Erro ao obter as preferências');
-        }
-        return response.json();
-      })
-      .then((data) => setPreferences(data))
-      .catch((error) => console.error('Erro ao obter as preferências:', error));
-  };
+  // const fetchPreferences = async () => {
+  //   await fetch('http://localhost:8000/Preferencias/lista-preferencias')
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error('Erro ao obter as preferências');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => setPreferences(data))
+  //     .catch((error) => console.error('Erro ao obter as preferências:', error));
+  // };
 
-  useEffect(() => {
-    fetchPreferences();
-  }, []);
+  // useEffect(() => {
+  //   // fetchPreferences();
+  // }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-800">
@@ -39,9 +38,6 @@ export default function PreferenciasForm() {
             >
               Selecione Preferências:
             </h2>
-            {preferences.map((preference) => (
-              <PrefCheckBox name={preference} />
-            ))}
             <div className="mt-3 flex gap-x-2">
               <button
                 type="button"

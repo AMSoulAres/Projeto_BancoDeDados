@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import JSONResponse, Response
 from fastapi.exceptions import HTTPException
@@ -42,9 +43,8 @@ async def busca_estudante_image(matriculaEstudante: int):
 @router.post("/insere-estudante")
 async def insere_estudante(estudante: EstudantePost):
     try:
-        inserido = dao.add_aluno(estudante.email, estudante.senha, estudante.curso, estudante.admin)
-        str(inserido).strip("(,)")
-        return JSONResponse(status_code=201, content=str(inserido).strip('(,)'))
+        inserido = dao.add_aluno(estudante)
+        return JSONResponse(status_code=201, content=json.loads(json.dumps(inserido.__dict__)))
     except HTTPException as e:
         raise e
     except Exception as err:
