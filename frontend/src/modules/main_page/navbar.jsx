@@ -14,6 +14,8 @@ function Navbar({ navigation }) {
     window.location.reload();
   };
 
+  const userData = localStorage.getItem('resonseData');
+
   return (
     <Disclosure as="nav" className="bg-black">
       {({ open }) => (
@@ -82,7 +84,7 @@ function Navbar({ navigation }) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/"
+                            href="/perfil"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Seu perfil
@@ -96,16 +98,6 @@ function Navbar({ navigation }) {
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Configurações
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Preferências
                           </a>
                         )}
                       </Menu.Item>

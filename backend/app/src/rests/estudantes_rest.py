@@ -1,9 +1,11 @@
 import json
-from fastapi import APIRouter, UploadFile, File
-from fastapi.responses import JSONResponse, Response
+from fastapi import APIRouter, Response, UploadFile, File
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.exceptions import HTTPException
 from backend.app.src.models.estudante_dao import EstudanteDAO, EstudantePost, EstudanteUpdate
 from backend.app.src.db_connector import mycursor, db
+import io
+
 
 router  = APIRouter(
     prefix="/estudante",
@@ -55,7 +57,7 @@ async def insere_estudante(matriculaEstudante: int, image_file: UploadFile = Fil
     try:
         contents = image_file.file.read()
         dao.add_image(matriculaEstudante, contents)
-        return JSONResponse(status_code=201, content=f"Imagem alterada com sucesso")
+        return JSONResponse(status_code=200, content=f"Imagem alterada com sucesso")
     except HTTPException as e:
         raise e
     except Exception as err:

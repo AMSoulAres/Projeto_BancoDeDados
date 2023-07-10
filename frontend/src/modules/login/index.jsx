@@ -10,14 +10,6 @@ export default function Login() {
   const [matriculaError, setMatriculaError] = useState('');
   const [senhaError, setSenhaError] = useState('');
 
-  const handleMatriculaChange = (event) => {
-    setMatricula(event.target.value);
-  };
-
-  const handleSenhaChange = (event) => {
-    setSenha(event.target.value);
-  };
-
   const validateInputs = () => {
     let hasError = false;
 
@@ -25,7 +17,7 @@ export default function Login() {
       setMatriculaError('O campo matrícula é obrigatório.');
       hasError = true;
     } else if (!/^\d+$/.test(matricula)) {
-      setMatriculaError('O campo matrícula  pode conter letras.');
+      setMatriculaError('O campo matrícula só deve conter dígitos.');
       hasError = true;
     } else {
       setMatriculaError('');
@@ -46,26 +38,24 @@ export default function Login() {
 
   const loginUser = async () => {
     try {
+      const matriculaInt = parseInt(matricula)
 
       const response = await axios.post(`${serverUrl}funcionalidades/login/`, {
-        matriculaEstudante: matricula,
+        matriculaEstudante: matriculaInt,
         senha,
       });
 
       if (response.status === 200) {
         localStorage.setItem('responseData', JSON.stringify(response.data));
-        window.location.reload(); // Recarrega a página para atualizar o estado de autenticação
-      } else if (response.status === 403) {
-        setSenhaError('Senha inválida');
-      } else if (response.status === 404) {
-        const errorMessage = response.data?.detail?.message || 'Usuário não encontrado';
-        setMatriculaError(errorMessage);
-      } else {
-        setMatriculaError('Ocorreu um erro');
+
+        window.location.reload();
+        // Recarrega a página para atualizar o estado de autenticação
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.detail) {
-        setMatriculaError(error.response.data.detail.message || 'Ocorreu um erro');
+      if (error.response.status === 403) {
+        setSenhaError('Senha inválida');
+      } else if (error.response.status === 404) {
+        setMatriculaError('Matrícula não encontrada');
       } else {
         setMatriculaError('Ocorreu um erro');
       }
@@ -111,11 +101,11 @@ export default function Login() {
                 <input
                   id="matricula"
                   name="matricula"
-                  type="text"
+                  type="number"
                   autoComplete="matricula"
                   required
                   value={matricula}
-                  onChange={handleMatriculaChange}
+                  onChange={(event) => setMatricula(event.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -144,7 +134,7 @@ export default function Login() {
                   autoComplete="current-password"
                   required
                   value={senha}
-                  onChange={handleSenhaChange}
+                  onChange={(event) => setSenha(event.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>

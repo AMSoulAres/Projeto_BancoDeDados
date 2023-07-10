@@ -15,10 +15,9 @@ rankingDao = RankingDao(db=db, cursor=mycursor)
 
 @router.post("/login")
 async def login(loginInfo: LoginModel):
-    try:
-        loginDao.login(loginInfo)
-        return "Login efetuado!"
-    
+    try:        
+        return loginDao.login(loginInfo)
+
     except HTTPException as e:
         raise e
     except Exception as err:

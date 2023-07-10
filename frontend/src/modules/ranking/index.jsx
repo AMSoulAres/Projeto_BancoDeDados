@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Ranking() {
+export default function RankingComponent() {
   // const [preferences, setPreferences] = useState([]);
 
   // const fetchPreferences = async () => {

@@ -7,9 +7,10 @@ import LoginForm from './modules/login';
 import CadastroForm from './modules/cadastro';
 import AlterarSenhaForm from './modules/senha/form';
 import Painel from './modules/admin/painel';
-import PreferenciasForm from './modules/ranking';
+import RankingComponent from './modules/ranking'
 import ProtectedRoutes from './services/ProtectedRoutes';
 import TurmasComponent from './modules/TurmasComponent';
+import PerfilComponent from './modules/perfil';
 
 function Home() {
   return (
@@ -66,13 +67,24 @@ function Admin() {
   );
 }
 
+function Perfil() {
+  return (
+    <>
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      <PerfilComponent />
+    </>
+  )
+}
+
 function Ranking() {
   return (
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
       { name: 'Ranking', href: '/cadastar-turma', current: true }]} />
-      <Ranking />
+      <RankingComponent />
     </div>
   );
 }
@@ -87,8 +99,10 @@ function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/cadastrar-turma" element={<Ranking />} />
           <Route path="/turma" element={<Turmas />} />
+
         </Route>
       </Routes>
     </Router>
