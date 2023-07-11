@@ -8,9 +8,11 @@ class Turma:
         self.idTurma = idTurma
 
 class TurmaContexto:
-    def __init__(self, nomeDisciplina, nomeProfessor, idTurma):
+    def __init__(self, nomeDisciplina, idDisciplina, nomeProfessor, idProfessor, idTurma):
         self.nomeDisciplina = nomeDisciplina
+        self.idDisciplina = idDisciplina
         self.nomeProfessor = nomeProfessor
+        self.idProfessor = idProfessor
         self.idTurma = idTurma
 
 class TurmaPost(BaseModel):
@@ -19,6 +21,7 @@ class TurmaPost(BaseModel):
 
 class TurmaUpdate(BaseModel):
     idProfessor: int
+    idDisciplina: int 
 
 class TurmaDeleteRequest(BaseModel):
     idTurma: int
@@ -41,7 +44,7 @@ class TurmaDao:
     
     def get_all_context(self):
         try:
-            query = "SELECT d.nomeDisciplina, p.nomeProfessor , t.idTurma "
+            query = "SELECT d.nomeDisciplina, d.idDisciplina, p.nomeProfessor, p.idProfessor, t.idTurma "
             query += "FROM avaliacaounb.Turmas t "
             query += "INNER JOIN avaliacaounb.Professores p "
             query += "ON t.idProfessor = p.idProfessor "
@@ -72,7 +75,7 @@ class TurmaDao:
         
     def get_turma_por_id_contextualizada(self, idTurma):
         try:
-            query = "SELECT d.nomeDisciplina, p.nomeProfessor , t.idTurma "
+            query = "SELECT d.nomeDisciplina, d.idDisciplina, p.nomeProfessor, p.idProfessor, t.idTurma "
             query += "FROM avaliacaounb.Turmas t "
             query += "INNER JOIN avaliacaounb.Professores p "
             query += "ON t.idProfessor = p.idProfessor "
@@ -92,35 +95,50 @@ class TurmaDao:
     
     def add_turma(self, idProfessor, idDisciplina):
         try:
-            existeTurmaQuery = "SELECT idDisciplina, idProfessor FROM avaliacaounb.Turmas "
-            existeTurmaQuery += f"WHERE idDisciplina = {idDisciplina} AND idProfessor = {idProfessor};"
-            self.cursor.execute(existeTurmaQuery)
+            if (idProfessor != 0 or idDisciplina != 0):
+                existeTurmaQuery = "SELECT idDisciplina, idProfessor FROM avaliacaounb.Turmas "
+                existeTurmaQuery += f"WHERE idDisciplina = {idDisciplina} AND idProfessor = {idProfessor};"
+                self.cursor.execute(existeTurmaQuery)
+                listaTurmas = self.cursor.fetchall()
+                print(listaTurmas)
+                if listaTurmas == []:
+                    self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Professores WHERE idProfessor = {idProfessor}")
+                    departamentoProfessor = self.cursor.fetchone()[0]
 
-            if self.cursor.fetchall() != []:
-                self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Professores WHERE idProfessor = {idProfessor}")
-                departamentoProfessor = self.cursor.fetchone()
+                    self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Disciplinas WHERE idDisciplina = {idDisciplina}")
+                    departamentoDisciplina = self.cursor.fetchone()[0]
 
-                self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Disciplinas WHERE idDisciplina = {idDisciplina}")
-                departamentoDisciplina = self.cursor.fetchone()
-
-                if departamentoProfessor == departamentoDisciplina:
-                    self.cursor.execute(f"INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor) VALUES ({idDisciplina}, {idProfessor});")
-                    self.db.commit()
-                    self.cursor.execute("SELECT LAST_INSERT_ID();")
-                    estudanteInserido = self.cursor.fetchone()
-                    return estudanteInserido
-                raise HTTPException(status_code=400, detail="Professor e Disciplina devem pertencer ao mesmo departamento")
-            
-            raise HTTPException(status_code=409, detail="Turma já cadastrada.")
+                    if departamentoProfessor == departamentoDisciplina:
+                        self.cursor.execute(f"INSERT INTO avaliacaounb.Turmas (idDisciplina, idProfessor) VALUES ({idDisciplina}, {idProfessor});")
+                        self.db.commit()
+                        self.cursor.execute("SELECT LAST_INSERT_ID();")
+                        estudanteInserido = self.cursor.fetchone()
+                        return estudanteInserido
+                    raise HTTPException(status_code=400, detail="Professor e Disciplina devem pertencer ao mesmo departamento")
+                
+                raise HTTPException(status_code=409, detail="Turma já cadastrada")
+            raise HTTPException(status_code=400, detail="Valores não podem ser vazios")
             
         except Exception as err:
             print(err)
             raise err
 
-    def update_turma(self, idTurma, idProfessor):
+    def update_turma(self, idTurma, idProfessor, idDisciplina):
         try:
-            self.cursor.execute(f"UPDATE avaliacaounb.Turmas SET idProfessor = {idProfessor} WHERE idTurma = {idTurma}")
-            self.db.commit()
+            self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Professores WHERE idProfessor = {idProfessor}")
+            departamentoProfessor = self.cursor.fetchone()[0]
+            print(departamentoProfessor)
+
+            self.cursor.execute(f"SELECT idDepartamento FROM avaliacaounb.Disciplinas WHERE idDisciplina = {idDisciplina}")
+            departamentoDisciplina = self.cursor.fetchone()[0]
+            print(departamentoDisciplina)
+
+            if departamentoProfessor == departamentoDisciplina:
+                self.cursor.execute(f"UPDATE avaliacaounb.Turmas SET idProfessor = {idProfessor} WHERE idTurma = {idTurma}")
+                self.db.commit()
+                return
+            raise HTTPException(status_code=400, detail="Professor e Disciplina devem pertencer ao mesmo departamento")
+        
 
         except Exception as err:
             print(err)
@@ -152,12 +170,9 @@ class TurmaDao:
                 self.db.commit()
                 self.cursor.execute(f"DELETE FROM avaliacaounb.Turmas WHERE idTurma = {idTurma};")
                 self.db.commit()
+                return
 
             raise HTTPException(status_code=403, detail="Estudante não é administrador")
-
-        
-
-
 
         except Exception as err:
             print(err)

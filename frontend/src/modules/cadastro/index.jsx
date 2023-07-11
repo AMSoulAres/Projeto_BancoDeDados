@@ -208,28 +208,6 @@ export default function Cadastro() {
               </div>
               {contaSucesso && <p className="text-green-500 text-xs mt-1">{contaSucesso}</p>}
             </div>
-
-            {/* <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="image" className="block text-sm font-medium leading-6 text-[#53a9f6]">
-                  Imagem de perfil
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="image"
-                  name="image"
-                  type="file"
-                  multiple
-                  accept='.jpeg, .png. jpg'
-                  formEncType='multipart/form-data'
-                  onChange={onImageChange}
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                />
-              </div>
-              {contaSucesso && <p className="text-green-500 text-xs mt-1">{contaSucesso}</p>}
-            </div> */}
-
             <div>
               <button
                 type="submit"

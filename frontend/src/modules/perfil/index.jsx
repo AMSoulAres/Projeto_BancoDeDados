@@ -8,7 +8,9 @@ export default function PerfilComponent() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [curso, setCurso] = useState('');
+  const [admin, setAdmin] = useState('');
   const [image, setImage] = useState();
+  const [newImage, setNewImage] = useState();
   const [matriculaError, setMatriculaError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [senhaError, setSenhaError] = useState('');
@@ -31,21 +33,26 @@ export default function PerfilComponent() {
       if (userData.curso) {
         setCurso(userData.curso);
       }
-      if (userData.image) {
-        setImage(userData.image);
+      if (userData.admin) {
+        setAdmin(userData.admin);
       }
 
-      fetch(`${serverUrl}estudante/${userData.matricula}/image`)
-        .then(response => response.blob())
-        .then(imageblob => setImage(imageblob))
     };
-
+    const fetchImage = async () => {
+      const userData = JSON.parse(localStorage.getItem('responseData'));
+      const res = await fetch(`${serverUrl}estudante/image/${userData.matricula}`)
+      const imageBlob = await res.blob();
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      setImage(imageObjectURL);
+    };
+    
     getStoredData();
+    fetchImage()
   }, []);
 
   const onImageChange = (e) => {
     console.log(e.target.files[0]);
-    setImage(e.target.files[0]);
+    setNewImage(e.target.files[0]);
   }
 
   const validateInputs = () => {
@@ -105,16 +112,13 @@ export default function PerfilComponent() {
         setAlteracaoSucesso('Informações atualizadas com sucesso!');
         localStorage.setItem('responseData', JSON.stringify(response.data));
         // Recarrega a página para atualizar o estado de autenticação
-
-        // Redirecionar para outra página, se necessário
       } else {
         // Algo deu errado ao criar a conta
         setSenhaError('Não foi possível atualizar os dados. Por favor, tente novamente.');
       }
-      if (image) {
+      if (newImage) {
         const formData = new FormData();
-        formData.append("image_file", image, image.name);
-
+        formData.append("image_file", newImage, newImage.name);
         const response = await fetch(`${serverUrl}estudante/insere-imagem/${matricula}`, {
           method: 'POST',
           headers: { 'accept': 'application/json' },
@@ -122,6 +126,7 @@ export default function PerfilComponent() {
         }
         );
       }
+      window.location.reload();
 
     } catch (err) {
       if (err.response) {
@@ -141,24 +146,35 @@ export default function PerfilComponent() {
         }
       } else {
         // Outro erro de requisição
+        console.log(err)
         setSenhaError('Ocorreu um erro ao atualizar os dados. Por favor, tente novamente.');
       }
     }
   };
+
+  const handleDelete = async () => {
+    const userData = JSON.parse(localStorage.getItem('responseData'));
+    const response = await fetch(`${serverUrl}estudante/deleta-estudante/${userData.matricula}`, {method: 'DELETE'});
+    localStorage.clear();
+    window.location.reload();
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#1a0409]">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            className="mx-auto h-50 w-auto"
+            className="mx-auto h-48 max-h-full rounded-full"
             src={image}
-            alt="Atlax Logo"
+            alt="Imagem usuário"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-[#f5f7f7]">
-            Crie sua conta!
+            Informações pessoais
           </h2>
         </div>
+        <h3 className="mt-2 text-center text-1xl font-bold leading-9 tracking-tight text-[#f5f7f7]">
+            Tipo de conta: {(admin === 0) ? <>Conta comum</> : <>Administrador</>}
+          </h3>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
@@ -266,6 +282,14 @@ export default function PerfilComponent() {
                 className="flex w-full justify-center rounded-md bg-[#87001f] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ad0303] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Atualizar dados
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={handleDelete}
+                className="flex w-full justify-center rounded-md bg-[#ff002b] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ad0303] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Excluir conta
               </button>
             </div>
           </form>

@@ -61,7 +61,7 @@ async def insere_turma(turma: TurmaPost):
 @router.put("/atualiza-turma/{idTurma}")
 async def atualiza_turma(idTurma: int, turma: TurmaUpdate):
     try:
-        dao.update_turma(idTurma, turma.idProfessor)
+        dao.update_turma(idTurma, turma.idProfessor, turma.idDisciplina)
         return JSONResponse(status_code=200, content="Turma atualizada com sucesso")
     except HTTPException as e:
         raise e

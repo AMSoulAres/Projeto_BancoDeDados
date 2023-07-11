@@ -9,8 +9,11 @@ import AlterarSenhaForm from './modules/senha/form';
 import Painel from './modules/admin/painel';
 import RankingComponent from './modules/ranking'
 import ProtectedRoutes from './services/ProtectedRoutes';
-import TurmasComponent from './modules/TurmasComponent';
+import TurmasComponent from './modules/turmas';
 import PerfilComponent from './modules/perfil';
+import CadastrarTurmaComponent from './modules/cadastrar-turma';
+import EditarTurmaComponent from './modules/editar-turma';
+import AvaliacoesComponent from './modules/avaliacoes';
 
 function Home() {
   return (
@@ -89,6 +92,39 @@ function Ranking() {
   );
 }
 
+function CadastrarTurma() {
+  return (
+    <div>
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      <CadastrarTurmaComponent />
+    </div>
+  );
+}
+
+function EditarTurma() {
+  return (
+    <div>
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      <EditarTurmaComponent />
+    </div>
+  );
+}
+
+function Avaliacoes() {
+  return (
+    <div>
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      <AvaliacoesComponent />
+    </div>
+  );
+}
+
 function App() {
   return (
     <Router>
@@ -100,9 +136,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/perfil" element={<Perfil />} />
-          <Route path="/cadastrar-turma" element={<Ranking />} />
+          <Route path="/cadastrar-turma" element={<CadastrarTurma />} />
           <Route path="/turma" element={<Turmas />} />
-
+          <Route path="/editar-turma" element={<EditarTurma />} />
+          <Route path="/avaliacoes" element={<Avaliacoes />} />
         </Route>
       </Routes>
     </Router>

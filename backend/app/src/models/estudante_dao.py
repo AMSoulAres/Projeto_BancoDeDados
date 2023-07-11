@@ -64,7 +64,7 @@ class EstudanteDAO:
             query = "SELECT image "
             query += f"FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matriculaEstudante}"
             self.cursor.execute(query)
-            resposta = self.cursor.fetchone()
+            resposta = self.cursor.fetchone()[0]
             if resposta is None:
                 raise HTTPException(status_code=404)
             
@@ -125,14 +125,47 @@ class EstudanteDAO:
             self.cursor.execute(final_query)
             self.db.commit()
 
+            selectQuery = "SELECT matriculaEstudante, email, senha, curso, admin "
+            selectQuery += "FROM avaliacaounb.Estudantes "
+            selectQuery += f"WHERE matriculaEstudante = {matricula};"
+            self.cursor.execute(selectQuery)
+            resposta = self.cursor.fetchone()
+            
+            if resposta is None:
+                raise HTTPException(status_code=404, detail="Matrícula não encontrada")
+            
+            estudante = Estudante(*resposta)
+            return estudante
+
         except Exception as err:
             print(err)
             raise err
         
     def delete_estudante(self, matricula):
         try:
+            self.cursor.execute(f"SELECT idAvaliacaoTurma FROM avaliacaounb.AvaliacaoTurma at2 WHERE at2.matriculaEstudante = {matricula};")
+            idAvaliacoesTurma = self.cursor.fetchall()
+
+            for id in idAvaliacoesTurma:
+                self.cursor.execute(f"DELETE FROM avaliacaounb.Denuncia WHERE idAvaliacaoTurma = {id[0]}")
+                self.db.commit()
+
+            self.cursor.execute(f"DELETE FROM avaliacaounb.AvaliacaoTurma at2 WHERE at2.matriculaEstudante = {matricula};") 
+            self.db.commit()
+            
+            self.cursor.execute(f"SELECT idAvaliacaoProfessor FROM avaliacaounb.AvaliacaoProfessor ap WHERE ap.matriculaEstudante = {matricula};")
+            idAvaliacoesProfessor = self.cursor.fetchall()
+
+            for id in idAvaliacoesProfessor:
+                self.cursor.execute(f"DELETE FROM avaliacaounb.Denuncia WHERE idAvaliacaoProfessor = {id[0]}")
+                self.db.commit()
+
+            self.cursor.execute(f"DELETE FROM avaliacaounb.AvaliacaoProfessor ap WHERE ap.matriculaEstudante = {matricula};") 
+            self.db.commit()
+
             self.cursor.execute(f"DELETE FROM avaliacaounb.Estudantes WHERE matriculaEstudante = {matricula}")
             self.db.commit()
+            
         except Exception as err:
             print(err)
             raise err

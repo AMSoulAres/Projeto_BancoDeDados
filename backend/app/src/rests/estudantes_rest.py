@@ -1,10 +1,11 @@
 import json
 from fastapi import APIRouter, Response, UploadFile, File
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.exceptions import HTTPException
 from backend.app.src.models.estudante_dao import EstudanteDAO, EstudantePost, EstudanteUpdate
 from backend.app.src.db_connector import mycursor, db
-import io
+import base64
 
 
 router  = APIRouter(
@@ -32,11 +33,11 @@ async def busca_estudante(matriculaEstudante: int):
     except Exception as err:
         HTTPException(status_code=500, detail=f"{err}")
 
-@router.get("/{matriculaEstudante}/image")
+@router.get("/image/{matriculaEstudante}")
 async def busca_estudante_image(matriculaEstudante: int):
     try:
-        image = dao.get_image_by_id(matriculaEstudante)
-        return Response(content=image, media_type="image/png")
+        img = dao.get_image_by_id(matriculaEstudante)
+        return Response(content=img, media_type="image/*")
     except HTTPException as e:
         raise e
     except Exception as err:
@@ -66,8 +67,8 @@ async def insere_estudante(matriculaEstudante: int, image_file: UploadFile = Fil
 @router.put("/atualiza-estudante/{matriculaEstudante}")
 async def atualiza_estudante(matriculaEstudante: int, estudante: EstudanteUpdate):
     try:
-        dao.update_estudante(matriculaEstudante, estudante)
-        return JSONResponse(status_code=200, content="Usuário atualizado com sucesso")
+        return dao.update_estudante(matriculaEstudante, estudante)
+         
     except HTTPException as e:
         raise e
     except Exception as err:
