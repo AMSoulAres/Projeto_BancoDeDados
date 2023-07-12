@@ -120,6 +120,9 @@ class AvaliacaoTurmaDAO:
 
             avaliacao = AvaliacaoTurmaDeleteResponse(*resposta)
             if avaliacao.matriculaEstudante == matriculaEstudante or admin == 1:
+                queryDeleteDenuncia = f"DELETE FROM avaliacaounb.Denuncia WHERE idAvaliacaoTurma = {idAvaliacaoTurma}"
+                self.cursor.execute(queryDeleteDenuncia)
+                self.db.commit()
                 queryDelete = "DELETE FROM avaliacaounb.AvaliacaoTurma WHERE "
                 queryDelete += f"idAvaliacaoTurma={idAvaliacaoTurma};"
                 self.cursor.execute(queryDelete)

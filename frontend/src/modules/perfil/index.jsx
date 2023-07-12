@@ -8,7 +8,7 @@ export default function PerfilComponent() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [curso, setCurso] = useState('');
-  const [admin, setAdmin] = useState('');
+  const [admin, setAdmin] = useState(0);
   const [image, setImage] = useState();
   const [newImage, setNewImage] = useState();
   const [matriculaError, setMatriculaError] = useState('');
@@ -45,7 +45,7 @@ export default function PerfilComponent() {
       const imageObjectURL = URL.createObjectURL(imageBlob);
       setImage(imageObjectURL);
     };
-    
+
     getStoredData();
     fetchImage()
   }, []);
@@ -154,11 +154,12 @@ export default function PerfilComponent() {
 
   const handleDelete = async () => {
     const userData = JSON.parse(localStorage.getItem('responseData'));
-    const response = await fetch(`${serverUrl}estudante/deleta-estudante/${userData.matricula}`, {method: 'DELETE'});
+    const response = await fetch(`${serverUrl}estudante/deleta-estudante/${userData.matricula}`, { method: 'DELETE' });
     localStorage.clear();
     window.location.reload();
   }
 
+  console.log(admin)
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#1a0409]">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -173,8 +174,8 @@ export default function PerfilComponent() {
           </h2>
         </div>
         <h3 className="mt-2 text-center text-1xl font-bold leading-9 tracking-tight text-[#f5f7f7]">
-            Tipo de conta: {(admin === 0) ? <>Conta comum</> : <>Administrador</>}
-          </h3>
+          Tipo de conta: {(admin === 0) ? <p>Conta comum</p> : <p>Administrador</p>}
+        </h3>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>

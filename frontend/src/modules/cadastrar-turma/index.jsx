@@ -1,6 +1,5 @@
 import axios from "axios";
-import React, {useState, useEffect}from "react";
-import DropDown from "../dropdown";
+import React, { useState, useEffect } from "react";
 import AsyncSelect from 'react-select/async';
 
 const serverUrl = "http://localhost:8000/";
@@ -22,10 +21,10 @@ export default function CadastrarTurmaComponent() {
       setDisciplinas(responseDisciplinas.data)
     };
     loadData();
-  },[])
+  }, [])
 
   const professorDepartamento = professores.map(item => {
-    return {  
+    return {
       label: `${item.nomeProfessor} - ${item.nomeDepartamento}`,
       value: `${item.nomeProfessor}`,
       id: item.idProfessor
@@ -33,35 +32,35 @@ export default function CadastrarTurmaComponent() {
   });
   const filterProfessor = (inputValue) => {
     return professorDepartamento
-    .filter((i) => {
-      return i.value.toLowerCase().includes(inputValue.toLowerCase())
-    }
-    );
+      .filter((i) => {
+        return i.value.toLowerCase().includes(inputValue.toLowerCase())
+      }
+      );
   };
-  
+
   const loadOptionsProfessor = (
     inputValue,
     callback
-    ) => {
-      setTimeout(() => {
-        callback(filterProfessor(inputValue));
-      }, 1000);
-    };
+  ) => {
+    setTimeout(() => {
+      callback(filterProfessor(inputValue));
+    }, 1000);
+  };
 
-    const disciplinaDepartamento = disciplinas.map(item => {
-      return {  
-        label: `${item.nomeDisciplina} - ${item.nomeDepartamento}`,
-        value: `${item.nomeDisciplina}`,
-        id: item.idDisciplina
-      }
-    });
-    
+  const disciplinaDepartamento = disciplinas.map(item => {
+    return {
+      label: `${item.nomeDisciplina} - ${item.nomeDepartamento}`,
+      value: `${item.nomeDisciplina}`,
+      id: item.idDisciplina
+    }
+  });
+
   const filterDisciplina = (inputValue) => {
     return disciplinaDepartamento
-            .filter((i) => {
-             return i.value.toLowerCase().includes(inputValue.toLowerCase())
-            }
-    );
+      .filter((i) => {
+        return i.value.toLowerCase().includes(inputValue.toLowerCase())
+      }
+      );
   };
 
   const loadOptionsDisciplina = (
@@ -77,11 +76,11 @@ export default function CadastrarTurmaComponent() {
     event.preventDefault();
     setCadastroError('')
     setCadastroSucesso('')
-    
+
     try {
       const response = await axios.post(`${serverUrl}turma/insere-turma`, {
         idProfessor: idProfessor,
-        idDisciplina:  idDisciplina,
+        idDisciplina: idDisciplina,
       });
 
       if (response.status === 201) {
@@ -119,18 +118,18 @@ export default function CadastrarTurmaComponent() {
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="items-center justify-between">
+            <div className="items-center justify-between">
               <div className="mt-2">
-              <label htmlFor="curso" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
+                <label htmlFor="curso" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
                   Professor
                 </label>
-              <AsyncSelect onChange={(choice) => {setIdProfessor(choice.id)}} cacheOptions loadOptions={loadOptionsProfessor} defaultOptions={professorDepartamento}/>
+                <AsyncSelect onChange={(choice) => { setIdProfessor(choice.id) }} cacheOptions loadOptions={loadOptionsProfessor} defaultOptions={professorDepartamento} />
               </div>
               <div className="mt-2">
-              <label htmlFor="curso" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
+                <label htmlFor="curso" className="block text-sm font-medium leading-6 text-[#f5f7f7]">
                   Disciplina
                 </label>
-              <AsyncSelect onChange={(choice) => {setIdDisciplina(choice.id)}} cacheOptions loadOptions={loadOptionsDisciplina} defaultOptions={disciplinaDepartamento}/>
+                <AsyncSelect onChange={(choice) => { setIdDisciplina(choice.id) }} cacheOptions loadOptions={loadOptionsDisciplina} defaultOptions={disciplinaDepartamento} />
               </div>
               {(cadastroError === '') ? <></> : <p className="text-red-600 text-xs mt-1">{cadastroError}</p>}
               {(cadastroSucesso === '') ? <></> : <p className="text-green-500 text-xs mt-1">{cadastroSucesso}</p>}

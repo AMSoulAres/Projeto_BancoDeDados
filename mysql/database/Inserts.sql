@@ -43,7 +43,7 @@ INSERT INTO avaliacaounb.Professores (idDepartamento,nomeProfessor,idade) VALUES
 	 (3,'MARIA',36),
 	 (3,'JOANA',36),
 	 (3,'MARCELA',36),
-	 (3,'ROSIMAR',36);
+	 (3,'ROSIMAR',36),
 	 (3,'PONTES',36),
 	 (3,'CHACON',36);
 -- INSERT TURMAS

@@ -14,6 +14,7 @@ import PerfilComponent from './modules/perfil';
 import CadastrarTurmaComponent from './modules/cadastrar-turma';
 import EditarTurmaComponent from './modules/editar-turma';
 import AvaliacoesComponent from './modules/avaliacoes';
+import CadastrarAvaliacaoComponent from './modules/cadastrar-avaliacao';
 
 function Home() {
   return (
@@ -125,6 +126,17 @@ function Avaliacoes() {
   );
 }
 
+function CadastrarAvaliacao() {
+  return (
+    <div>
+      <Navbar navigation={[{ name: 'Home', href: '/', current: false },
+      { name: 'Turmas', href: '/turma', current: false },
+      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      <CadastrarAvaliacaoComponent />
+    </div>
+  )
+}
+
 function App() {
   return (
     <Router>
@@ -140,6 +152,7 @@ function App() {
           <Route path="/turma" element={<Turmas />} />
           <Route path="/editar-turma" element={<EditarTurma />} />
           <Route path="/avaliacoes" element={<Avaliacoes />} />
+          <Route path="/cadastrar-avaliacao" element={<CadastrarAvaliacao />} />
         </Route>
       </Routes>
     </Router>
