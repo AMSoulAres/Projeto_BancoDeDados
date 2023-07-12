@@ -43,7 +43,7 @@ export default function CardAvaliacao(props) {
   };
 
   return (
-    <div class="ml-3 max-w-md w-full">
+    <div class="ml-3 max-w-2xl w-full">
       <div class="lg:h-auto lg:w-48 flex-none rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
       </div>
       <div class="mt-2 h-30 border-r border-b border-gray-800 lg:border-l-0 lg:border-t lg:border-black bg-gray-900 rounded-xl lg:rounded-b- lg:rounded-r p-4 flex flex-col">

@@ -1,7 +1,8 @@
 class Ranking:
-    def __init__(self, NomeDisciplina, idTurma, MediaNivelAvaliacao):
-        self.NomeDisciplina = NomeDisciplina
+    def __init__(self, idTurma, nomeProfessor, nomeDisciplina, MediaNivelAvaliacao):
+        self.nomeDisciplina = nomeDisciplina
         self.idTurma = idTurma
+        self.nomeProfessor = nomeProfessor
         self.MediaNivelAvaliacao = MediaNivelAvaliacao
 
 class RankingDao:

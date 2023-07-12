@@ -21,7 +21,7 @@ function Home() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: true },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '#', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <Content />
       <Footer />
     </div>
@@ -33,7 +33,7 @@ function Turmas() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: true },
-      { name: 'Ranking', href: '#', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <TurmasComponent />
     </div>
   );
@@ -76,7 +76,7 @@ function Perfil() {
     <>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <PerfilComponent />
     </>
   )
@@ -87,7 +87,7 @@ function Ranking() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '/cadastar-turma', current: true }]} />
+      { name: 'Ranking', href: '/ranking', current: true }]} />
       <RankingComponent />
     </div>
   );
@@ -98,7 +98,7 @@ function CadastrarTurma() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <CadastrarTurmaComponent />
     </div>
   );
@@ -109,7 +109,7 @@ function EditarTurma() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <EditarTurmaComponent />
     </div>
   );
@@ -120,7 +120,7 @@ function Avaliacoes() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <AvaliacoesComponent />
     </div>
   );
@@ -131,7 +131,7 @@ function CadastrarAvaliacao() {
     <div>
       <Navbar navigation={[{ name: 'Home', href: '/', current: false },
       { name: 'Turmas', href: '/turma', current: false },
-      { name: 'Ranking', href: '/cadastar-turma', current: false }]} />
+      { name: 'Ranking', href: '/ranking', current: false }]} />
       <CadastrarAvaliacaoComponent />
     </div>
   )
@@ -153,6 +153,7 @@ function App() {
           <Route path="/editar-turma" element={<EditarTurma />} />
           <Route path="/avaliacoes" element={<Avaliacoes />} />
           <Route path="/cadastrar-avaliacao" element={<CadastrarAvaliacao />} />
+          <Route path="/ranking" element={<Ranking />} />
         </Route>
       </Routes>
     </Router>

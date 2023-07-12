@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { XIcon, MenuIcon } from '@heroicons/react/solid';
 import { IoLogOutSharp, IoPersonSharp } from 'react-icons/io5';
@@ -9,12 +9,18 @@ function classNames(...classes) {
 }
 
 function Navbar({ navigation }) {
+  const [image, setImage] = useState();
+  useEffect(() => {
+    const getImage = () => {
+      const userImage = JSON.parse(localStorage.getItem('userImage'));
+      if (userImage.image) {
+        setImage(userImage.image);
+      }
+  }}, []);
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
-
-  const userData = localStorage.getItem('resonseData');
 
   return (
     <Disclosure as="nav" className="bg-black">

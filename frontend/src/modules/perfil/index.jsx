@@ -44,6 +44,7 @@ export default function PerfilComponent() {
       const imageBlob = await res.blob();
       const imageObjectURL = URL.createObjectURL(imageBlob);
       setImage(imageObjectURL);
+      localStorage.setItem('imageUser', {image: image})
     };
 
     getStoredData();
@@ -165,7 +166,7 @@ export default function PerfilComponent() {
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            className="mx-auto h-48 max-h-full rounded-full"
+            className="mx-auto h-48 w-48 max-h-full rounded-full"
             src={image}
             alt="Imagem usuário"
           />

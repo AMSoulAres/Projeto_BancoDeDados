@@ -1,52 +1,51 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import CardRanking from '../card-ranking';
 
+const serverUrl = 'http://localhost:8000/';
 export default function RankingComponent() {
-  // const [preferences, setPreferences] = useState([]);
 
-  // const fetchPreferences = async () => {
-  //   await fetch('http://localhost:8000/Preferencias/lista-preferencias')
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error('Erro ao obter as preferências');
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => setPreferences(data))
-  //     .catch((error) => console.error('Erro ao obter as preferências:', error));
-  // };
+  const [turmas, setTurmas] = useState([]);
+  const [matricula, setMatricula] = useState(0);
+  const [admin, setAdmin] = useState(0);
 
-  // useEffect(() => {
-  //   // fetchPreferences();
-  // }, []);
+  useEffect(() => {
+    const fetchTurmas = async () => {
+      const response = await axios.get(`${serverUrl}funcionalidades/ranking`);
+      setTurmas(response.data.reverse());
+    }
+  
+    const getStoredData = () => {
+      const userData = JSON.parse(localStorage.getItem('responseData'));
 
+      if (userData.matricula) {
+        setMatricula(userData.matricula);
+      }
+
+      if (userData.admin) {
+        setAdmin(userData.admin);
+      }
+    };
+
+    getStoredData();
+    fetchTurmas();
+  }, []);
+
+  console.log(turmas);
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-800">
-      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div
-          className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0"
-          style={{ top: '-100px' }}
-        >
-          <div className="container py-4 content">
-            <h2
-              className="text-center mb-4"
-              style={{
-                fontFamily: 'Verdana, sans-serif',
-                color: 'white',
-                fontSize: '24px',
-                fontWeight: 'bold',
-              }}
-            >
-              Selecione Preferências:
-            </h2>
-            <div className="mt-3 flex gap-x-2">
-              <button
-                type="button"
-                className="px-3 py-1.5 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Salvar
-              </button>
-            </div>
-          </div>
+    <div class="min-h-screen bg-[#1a0409]">
+      <div class="flex justify-center items-center">
+        <div className='w-screen justify-center items-center'>
+          {turmas.map((turma) => (
+            <CardRanking
+              disciplina={turma.nomeDisciplina}
+              professor={turma.nomeProfessor}
+              turma={turma.idTurma}
+              nivel={turma.MediaNivelAvaliacao}
+              serverUrl={serverUrl}
+              matricula={matricula}
+            />
+          ))}
         </div>
       </div>
     </div>

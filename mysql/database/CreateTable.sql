@@ -68,15 +68,16 @@ ALTER TABLE Denuncia ADD FOREIGN KEY(idAvaliacaoTurma) REFERENCES AvaliacaoTurma
 
 CREATE VIEW `RankingDisciplinas` AS
 SELECT 
-    d.nomeDisciplina AS NomeDisciplina,
     t.idTurma,
+    p.nomeProfessor,
+    d.nomeDisciplina,
     AVG(at2.nivel) AS MediaNivelAvaliacao
 FROM
-    Disciplinas d
-INNER JOIN Turmas t ON d.idDisciplina = t.idDisciplina
+    Turmas t
+INNER JOIN Disciplinas d ON d.idDisciplina  = t.idDisciplina 
+INNER JOIN Professores p ON t.idProfessor = p.idProfessor 
 INNER JOIN AvaliacaoTurma at2 ON t.idTurma = at2.idTurma
-GROUP BY 
-    d.idDisciplina, t.idTurma;
+GROUP BY t.idTurma, p.nomeProfessor, d.idDisciplina;
 
 DROP PROCEDURE IF EXISTS avaliacaounb.busca_departamento_disciplinas;
 DELIMITER $$
