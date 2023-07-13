@@ -10,7 +10,7 @@ Certique-se que está na pasta do projeto
 O projeto está dockerizado, ou seja, necessita-se do Docker para rodar.
 
 Com o docker instalado, para subir o banco de dados e o backend, basta executar:
-(Talvez seja necessário baixar o mysql no coker primeiro)
+(Talvez seja necessário baixar o mysql no docker primeiro)
 ```
 docker pull mysql
 ```
@@ -19,6 +19,7 @@ docker-compose up
 ```
 
 Ao executar esse comandos os arquivos SQL em mysql/database serão executados para criar o DB e popular com dados básicos
+
 No navegador a documentação da API pode ser acessada em localhost:8000/docs
 
 ### FrontEnd
