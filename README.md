@@ -1,20 +1,40 @@
-install fastaoi, uvicorn, mysql, Pillow, pymysql
+# Projeto de Banco de Dados
 
+## Projeto feito com mysql, python com fastAPI e React
+
+## Para rodar o projeto
+###BackEnd
+
+O projeto está dockerizado, ou seja, necessita-se do Docker para rodar.
+
+Com o docker instalado, para subir o banco de dados e o backend, basta executar:
+(Talvez seja necessário baixar o mysql no coker primeiro)
+```
 docker pull mysql
+```
+```
+docker-compose up
+```
 
-docker build -t mysql-basic .
+Ao executar esse comandos os arquivos SQL em mysql/database serão executados para criar o DB e popular com dados básicos
+No navegador a documentação da API pode ser acessada em localhost:8000/docs
 
-docker run -d -p 3306:3306 --name mysql-basic -e MYSQL_ROOT_PASSWORD=root mysql-basic --max_allowed_packet=128M
+### FrontEnd
+Para o frontend é necessário instalar o node, para ter certeza, na versão 18.12.1
+Após a instalação do node, executar:
+```
+cd frontend/
+```
+Isso irá entrar na pasta correta e então:
+```
+npm install
+```
+Assim que ele terminar de baixar todas as dependências, executar:
+```
+npm start
+```
+Provavelmente vai demorar um pouco para carregar
 
-docker exec -it mysql-basic bash
-
-docker build -t backend
-docker run -d -p 8000:8000 --name backend backend
-
-para rodar com docker trocar imports de backend.app.src. para src.
-para o docker também alterar o host de conexão de mysql para localhost
+O site abrirá em localhost:3000
 
 
-mysql -uroot -p
-Enter password: root
-# Projeto_BancoDeDados_Back
