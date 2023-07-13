@@ -104,6 +104,8 @@ export default function PerfilComponent() {
       payload.curso = curso;
     }
 
+    payload.admin = 0;
+
     try {
 
       const response = await axios.put(`${serverUrl}estudante/atualiza-estudante/${matricula}`, payload);
