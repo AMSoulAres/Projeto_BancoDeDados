@@ -3,6 +3,8 @@
 ## Projeto feito com mysql, python com fastAPI e React
 
 ## Para rodar o projeto
+Certique-se que está na pasta do projeto
+
 ### BackEnd
 
 O projeto está dockerizado, ou seja, necessita-se do Docker para rodar.
