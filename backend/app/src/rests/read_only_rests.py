@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from backend.app.src.db_connector import mycursor, db
-from backend.app.src.models.professores_dao import ProfessoresDao
-from backend.app.src.models.disciplinas_dao import DisciplinasDao
+from src.db_connector import mycursor, db
+from src.models.professores_dao import ProfessoresDao
+from src.models.disciplinas_dao import DisciplinasDao
 
 router  = APIRouter(
     prefix="/read-only",

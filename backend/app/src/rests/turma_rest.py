@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.turma_dao import TurmaDao, TurmaPost, TurmaUpdate, TurmaDeleteRequest
-from backend.app.src.db_connector import mycursor, db
+from src.models.turma_dao import TurmaDao, TurmaPost, TurmaUpdate, TurmaDeleteRequest
+from src.db_connector import mycursor, db
 
 router  = APIRouter(
     prefix="/turma",

@@ -1,7 +1,7 @@
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel
 
-from backend.app.src.models.estudante_dao import Estudante
+from src.models.estudante_dao import Estudante
 
 class LoginModel(BaseModel):
     matriculaEstudante: int

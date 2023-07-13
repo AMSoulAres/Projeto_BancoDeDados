@@ -1,9 +1,8 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.login_dao import LoginDao, LoginModel
-from backend.app.src.models.ranking_dao import RankingDao
-from backend.app.src.db_connector import mycursor, db
+from src.models.login_dao import LoginDao, LoginModel
+from src.models.ranking_dao import RankingDao
+from src.db_connector import mycursor, db
 
 router  = APIRouter(
     prefix="/funcionalidades",

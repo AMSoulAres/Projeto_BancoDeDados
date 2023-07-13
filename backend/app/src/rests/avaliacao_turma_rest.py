@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.avaliacao_turma_dao import AvaliacaoTurmaDAO, AvaliacaoTurmaPost, AvaliacaoTurmaUpdate, AvaliacaoTurmaDeleteRequest
-from backend.app.src.db_connector import mycursor, db
+from src.models.avaliacao_turma_dao import AvaliacaoTurmaDAO, AvaliacaoTurmaPost, AvaliacaoTurmaUpdate, AvaliacaoTurmaDeleteRequest
+from src.db_connector import mycursor, db
 
 router  = APIRouter(
     prefix="/avaliacao-turma",

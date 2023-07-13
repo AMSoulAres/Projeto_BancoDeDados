@@ -3,8 +3,8 @@ from fastapi import APIRouter, Response, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.estudante_dao import EstudanteDAO, EstudantePost, EstudanteUpdate
-from backend.app.src.db_connector import mycursor, db
+from src.models.estudante_dao import EstudanteDAO, EstudantePost, EstudanteUpdate
+from src.db_connector import mycursor, db
 import base64
 
 

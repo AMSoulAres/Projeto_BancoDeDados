@@ -7,7 +7,7 @@ while True:
     tentativas += 1
     try:
         db = mysql.connector.connect(
-            host="localhost",
+            host="mysql",
             user="root",
             password="root",
             database="avaliacaounb",
@@ -17,7 +17,7 @@ while True:
         break
     except mysql.connector.errors.DatabaseError as err:
         print(err)
-        time.sleep(5)
+        time.sleep(8)
         if tentativas == 10:
             break
         pass

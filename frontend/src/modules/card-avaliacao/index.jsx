@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import warn from '../../assets/warn.png';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -8,7 +9,6 @@ function classNames(...classes) {
 }
 
 export default function CardAvaliacao(props) {
-  const navigate = useNavigate();
   const [nivel, setNivel] = useState(props.nivel);
   const [texto, setTexto] = useState(props.texto);
   const [edit, setEdit] = useState(false);
@@ -26,7 +26,7 @@ export default function CardAvaliacao(props) {
     console.log();
     request.matriculaEstudanteLogado = props.matriculaEstudante;
     request.idAvaliacaoTurma = props.idAvaliacao;
-    const response = await fetch(`${props.serverUrl}avaliacao-turma/deletar-avaliacao-turma`, {
+    await fetch(`${props.serverUrl}avaliacao-turma/deletar-avaliacao-turma`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
       body: JSON.stringify(request)
@@ -35,12 +35,16 @@ export default function CardAvaliacao(props) {
   }
 
   const handleEdit = async () => {
-    const response = await axios.put(`${props.serverUrl}avaliacao-turma/atualiza-avaliacao-turma/${props.idAvaliacao}`, {
+    await axios.put(`${props.serverUrl}avaliacao-turma/atualiza-avaliacao-turma/${props.idAvaliacao}`, {
       textoAvaliacao: texto,
       nivel: nivel
     })
     window.location.reload();
   };
+
+  const handleDenuncia = async () => {
+    await axios.post(`${props.serverUrl}denuncia/${props.idAvaliacao}`)
+  }
 
   return (
     <div class="ml-3 max-w-2xl w-full">
@@ -50,18 +54,27 @@ export default function CardAvaliacao(props) {
         <div class="mb-8 justify-evenly">
           {!edit ?
             <>
+            <div class="flex flex-row justify-between">
               <div class="text-white font-bold text-xl mb-2">{`🌟`.repeat(nivel)}</div>
+              <button onClick={handleDenuncia} class="opacity-70 hover:opacity-90">
+                <img class="float-right w-7" src={warn}/>
+              </button>
+            </div>
               <hr
                 class="my-2 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:opacity-100" />
               <h2 class="pt-30 text-white text-base">{props.texto}</h2>
+              {(props.admin === 1 && props.denuncias > 0) ?
+                <h3 class="text-red-600">Essa avaliação foi denunciada {props.denuncias} vezes</h3>
+                : <></>
+              }
             </>
             :
             <>
-              <Select
-                defaultValue={{ label: '🌟'.repeat(nivel), value: nivel }}
-                options={options}
-                onChange={(choice) => { setNivel(choice.value) }}
-              />
+                <Select
+                  defaultValue={{ label: '🌟'.repeat(nivel), value: nivel }}
+                  options={options}
+                  onChange={(choice) => { setNivel(choice.value) }}
+                />
               <div className='mt-2'>
                 <textarea
                   id="texto"

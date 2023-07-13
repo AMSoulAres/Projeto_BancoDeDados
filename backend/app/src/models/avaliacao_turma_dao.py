@@ -1,7 +1,7 @@
 from fastapi.exceptions import HTTPException
 from typing import Optional
 from pydantic import BaseModel
-from backend.app.src.models.estudante_dao import Estudante
+from src.models.estudante_dao import Estudante
 class AvaliacaoTurma:
     def __init__(self, matriculaEstudante, idTurma, textoAvaliacao, nivel, idAvaliacaoTurma):
         self.matriculaEstudante = matriculaEstudante

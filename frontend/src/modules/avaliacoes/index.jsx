@@ -9,6 +9,7 @@ export default function AvaliacoesComponent() {
   const navigate = useNavigate()
   const { state } = useLocation();
   const [avaliacoes, setAvaliacoes] = useState([]);
+  const [denuncias, setDenuncias] = useState([]);
   const [matricula, setMatricula] = useState(0);
   const [admin, setAdmin] = useState(0);
 
@@ -16,6 +17,11 @@ export default function AvaliacoesComponent() {
     const fetchAvaliacoes = async () => {
       const response = await axios.get(`${serverUrl}avaliacao-turma/avaliacao-turma-por-turma/${state.idTurma}`);
       setAvaliacoes(response.data);
+    }
+
+    const fetchDenuncias = async () => {
+      const response = await axios.get(`${serverUrl}denuncia/`)
+      setDenuncias(response.data);
     }
 
     const getStoredData = () => {
@@ -32,6 +38,7 @@ export default function AvaliacoesComponent() {
 
     getStoredData();
     fetchAvaliacoes();
+    fetchDenuncias();
   }, []);
 
   const handleCadastro = () => {
@@ -48,6 +55,7 @@ export default function AvaliacoesComponent() {
       <div class="flex flex-row justify-between">
         <div className='w-screen'>
           {avaliacoes.map((avaliacao) => (
+            
             <CardAvaliacao
               idAvaliacao={avaliacao.idAvaliacaoTurma}
               turma={avaliacao.idTurma}
@@ -57,6 +65,10 @@ export default function AvaliacoesComponent() {
               matriculaLogado={matricula}
               admin={admin}
               serverUrl={serverUrl}
+              denuncias={denuncias.filter(denuncia => {
+                if (denuncia === avaliacao.idAvaliacaoTurma) {
+                  return denuncia
+                }}).length}
             />
           ))}
         </div>

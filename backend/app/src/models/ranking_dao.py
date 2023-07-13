@@ -11,7 +11,7 @@ class RankingDao:
         self.cursor = cursor
 
     def get_rank(self):
-        self.cursor.execute("SELECT * FROM avaliacaounb.RankingDisciplinas")
+        self.cursor.execute("SELECT idTurma, nomeProfessor, nomeDisciplina, MediaNivelAvaliacao FROM avaliacaounb.RankingDisciplinas ORDER BY MediaNivelAvaliacao;")
         result = self.cursor.fetchall()
         resposta = [Ranking(*turma) for turma in result]
 

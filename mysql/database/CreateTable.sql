@@ -79,15 +79,13 @@ INNER JOIN Professores p ON t.idProfessor = p.idProfessor
 INNER JOIN AvaliacaoTurma at2 ON t.idTurma = at2.idTurma
 GROUP BY t.idTurma, p.nomeProfessor, d.idDisciplina;
 
-DROP PROCEDURE IF EXISTS avaliacaounb.busca_departamento_disciplinas;
+DROP PROCEDURE IF EXISTS avaliacaounb.insere_denuncia;
 DELIMITER $$
 $$
-CREATE PROCEDURE busca_departamento_disciplinas(IN IdDepartamento INT)
+CREATE PROCEDURE insere_denuncia (IN IdAvaliacao INT)
 BEGIN
-		SELECT d.nomeDepartamento, d.endereco, d2.nomeDisciplina
-		FROM avaliacaounb.Departamentos d
-		INNER JOIN avaliacaounb.Disciplinas d2 
-		ON d.idDepartamento = d2.idDepartamento
-		WHERE d.idDepartamento = IdDepartamento;
+	INSERT INTO avaliacaounb.Denuncia
+	(idAvaliacaoProfessor, idAvaliacaoTurma)
+	VALUES(NULL, IdAvaliacao);
 END$$
 DELIMITER ;

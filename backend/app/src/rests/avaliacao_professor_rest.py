@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from backend.app.src.models.avaliacao_professor_dao import AvaliacaoProfessorDAO, AvaliacaoProfessorPost
-from backend.app.src.models.avaliacao_professor_dao import AvaliacaoProfessorUpdate, AvaliacaoProfessorDeleteRequest
-from backend.app.src.db_connector import mycursor, db
+from src.models.avaliacao_professor_dao import AvaliacaoProfessorDAO, AvaliacaoProfessorPost
+from src.models.avaliacao_professor_dao import AvaliacaoProfessorUpdate, AvaliacaoProfessorDeleteRequest
+from src.db_connector import mycursor, db
 
 router  = APIRouter(
     prefix="/avaliacao-professor",
